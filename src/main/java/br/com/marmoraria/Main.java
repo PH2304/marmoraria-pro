@@ -1,4 +1,4 @@
-package com.marmoraria;
+package br.com.marmoraria;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;

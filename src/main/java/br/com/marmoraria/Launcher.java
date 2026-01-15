@@ -9,7 +9,7 @@ public class Launcher {
         try {
             // Inicia a aplicação JavaFX
             System.out.println("▶️  Iniciando aplicação JavaFX (interface manual)...");
-            com.marmoraria.Main.main(args);
+            br.com.marmoraria.Main.main(args);
 
         } catch (Exception e) {
             System.err.println("❌ ERRO CRÍTICO:");
