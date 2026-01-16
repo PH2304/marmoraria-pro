@@ -3,90 +3,51 @@ package br.com.marmoraria.model;
 import java.io.Serializable;
 
 public class ItemOrcamento implements Serializable {
-    private String id;
+
     private Material material;
     private Servico servico;
-    private double quantidade;
-    private double largura;
-    private double comprimento;
-    private double area;
-    private double valorUnitario;
+
+    private double larguraMm;
+    private double comprimentoMm;
+    private int quantidade;
+
+    private double areaM2;
     private double valorTotal;
-    private String observacoes;
 
-    public ItemOrcamento(Material material, Servico servico, double quantidade,
-                         double largura, double comprimento, String observacoes) {
-        this.material = material;
-        this.servico = servico;
-        this.quantidade = quantidade;
-        this.largura = largura;
-        this.comprimento = comprimento;
-        this.observacoes = observacoes;
-        calcularArea();
-        calcularValores();
-    }
+    public ItemOrcamento() {}
 
-    private void calcularArea() {
-        this.area = (largura / 1000) * (comprimento / 1000) * quantidade; // converte mm para metros
-    }
+    public void calcular() {
+        this.areaM2 = (larguraMm / 1000.0)
+                * (comprimentoMm / 1000.0)
+                * quantidade;
 
-    private void calcularValores() {
-        double precoMaterial = material != null ? material.getPrecoPorMetroQuadrado() * area : 0;
-        double precoServico = servico != null ? servico.getPrecoUnitario() * quantidade : 0;
-        this.valorUnitario = precoMaterial + precoServico;
-        this.valorTotal = this.valorUnitario * quantidade;
+        double totalMaterial = material != null
+                ? areaM2 * material.getPrecoPorMetroQuadrado()
+                : 0;
+
+        double totalServico = servico != null
+                ? servico.getPrecoUnitario() * quantidade
+                : 0;
+
+        this.valorTotal = totalMaterial + totalServico;
     }
 
     // Getters e Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
     public Material getMaterial() { return material; }
-    public void setMaterial(Material material) {
-        this.material = material;
-        calcularValores();
-    }
+    public void setMaterial(Material material) { this.material = material; }
 
     public Servico getServico() { return servico; }
-    public void setServico(Servico servico) {
-        this.servico = servico;
-        calcularValores();
-    }
+    public void setServico(Servico servico) { this.servico = servico; }
 
-    public double getQuantidade() { return quantidade; }
-    public void setQuantidade(double quantidade) {
-        this.quantidade = quantidade;
-        calcularArea();
-        calcularValores();
-    }
+    public double getLarguraMm() { return larguraMm; }
+    public void setLarguraMm(double larguraMm) { this.larguraMm = larguraMm; }
 
-    public double getLargura() { return largura; }
-    public void setLargura(double largura) {
-        this.largura = largura;
-        calcularArea();
-        calcularValores();
-    }
+    public double getComprimentoMm() { return comprimentoMm; }
+    public void setComprimentoMm(double comprimentoMm) { this.comprimentoMm = comprimentoMm; }
 
-    public double getComprimento() { return comprimento; }
-    public void setComprimento(double comprimento) {
-        this.comprimento = comprimento;
-        calcularArea();
-        calcularValores();
-    }
+    public int getQuantidade() { return quantidade; }
+    public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
 
-    public double getArea() { return area; }
-
-    public double getValorUnitario() { return valorUnitario; }
-
+    public double getAreaM2() { return areaM2; }
     public double getValorTotal() { return valorTotal; }
-
-    public String getObservacoes() { return observacoes; }
-    public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
-
-    @Override
-    public String toString() {
-        return String.format("%s - %.2f x %.2f mm - Área: %.3f m² - Total: R$ %.2f",
-                material != null ? material.getNome() : "Sem material",
-                largura, comprimento, area, valorTotal);
-    }
 }

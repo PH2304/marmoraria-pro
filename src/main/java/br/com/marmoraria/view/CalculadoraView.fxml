@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.com.marmoraria.controller.CalculadoraController"
+      spacing="10"
+      padding="20">
+
+    <HBox spacing="10">
+        <ComboBox fx:id="cbMaterial" promptText="Material"/>
+        <ComboBox fx:id="cbServico" promptText="Serviço"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <TextField fx:id="txtLargura" promptText="Largura (mm)"/>
+        <TextField fx:id="txtComprimento" promptText="Comprimento (mm)"/>
+        <TextField fx:id="txtQuantidade" promptText="Qtd"/>
+    </HBox>
+
+    <Button text="Adicionar"
+            onAction="#adicionarItem"/>
+
+    <TableView fx:id="tabela">
+        <columns>
+            <TableColumn fx:id="colArea" text="Área (m²)"/>
+            <TableColumn fx:id="colTotal" text="Total (R$)"/>
+        </columns>
+    </TableView>
+
+</VBox>
