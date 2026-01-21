@@ -48,6 +48,7 @@ public class Material implements Serializable {
 
     @Override
     public String toString() {
-        return nome + " (" + tipo + ") - R$ " + String.format("%.2f", precoPorMetroQuadrado) + "/m²";
+        return nome;
     }
+
 }
