@@ -8,81 +8,82 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import br.com.marmoraria.view.OrcamentoView;
+
 import java.io.IOException;
-import java.util.Objects;
 
 public class MainController {
 
     @FXML
     private void abrirCalculadora() {
         try {
+            System.out.println("Abrindo calculadora...");
+
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/marmoraria/view/CalculadoraView.fxml")
+                    getClass().getResource("/resources/br/com/marmoraria/view/CalculadoraView.fxml")
             );
             Parent root = loader.load();
 
             Stage stage = new Stage();
-            stage.setTitle("Calculadora de Materiais - Marmoraria");
+            stage.setTitle("Calculadora - Marmoraria Pro");
             stage.setScene(new Scene(root, 900, 600));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
+
         } catch (IOException e) {
             mostrarErro("Erro ao abrir calculadora", e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void abrirOrcamentos() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/marmoraria/view/OrcamentoView.fxml")
-            );
-            Parent root = loader.load();
+            System.out.println("Abrindo orçamentos...");
+
+            // Usar a OrcamentoView.java existente
+            OrcamentoView orcamentoView = new OrcamentoView();
+            Scene scene = new Scene(orcamentoView, 1100, 700);
 
             Stage stage = new Stage();
-            stage.setTitle("Gestão de Orçamentos - Marmoraria");
-            stage.setScene(new Scene(root, 1100, 700));
+            stage.setTitle("Orçamentos - Marmoraria Pro");
+            stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             mostrarErro("Erro ao abrir orçamentos", e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void abrirMateriais() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/marmoraria/view/MaterialView.fxml")
-            );
-            Parent root = loader.load();
+        mostrarInfo("Em Desenvolvimento", "Funcionalidade de catálogo em breve!");
+    }
 
-            Stage stage = new Stage();
-            stage.setTitle("Catálogo de Materiais e Serviços - Marmoraria");
-            stage.setScene(new Scene(root, 800, 600));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (IOException e) {
-            mostrarErro("Erro ao abrir materiais", e.getMessage());
-        }
+    @FXML
+    private void mostrarAjuda() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ajuda");
+        alert.setHeaderText("Guia Rápido");
+        alert.setContentText(
+                "1. Calculadora: Adicione materiais e calcule orçamentos\n" +
+                        "2. Orçamentos: Visualize e gerencie seus orçamentos\n" +
+                        "3. Catálogo: Em breve\n\n" +
+                        "Para mais informações, aguarde as próximas atualizações."
+        );
+        alert.showAndWait();
     }
 
     @FXML
     private void mostrarSobre() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Sobre o Sistema");
-        alert.setHeaderText("Calculadora de Orçamentos - Marmoraria Profissional");
+        alert.setTitle("Sobre");
+        alert.setHeaderText("Marmoraria Pro");
         alert.setContentText(
-                "Versão: 1.0.0\n" +
-                        "Desenvolvido para marmorarias e indústrias de pedras\n" +
-                        "\n" +
-                        "Funcionalidades:\n" +
-                        "• Cálculo preciso de áreas e custos\n" +
-                        "• Catálogo de materiais (mármore, granito, quartzo)\n" +
-                        "• Gestão completa de orçamentos\n" +
-                        "• Geração de PDF e relatórios\n" +
-                        "• Cálculo de margens de lucro\n" +
-                        "\n" +
+                "Versão: 2.0.0\n" +
+                        "Sistema para cálculo de orçamentos de marmoraria\n\n" +
                         "© 2024 - Todos os direitos reservados"
         );
         alert.showAndWait();
@@ -92,12 +93,10 @@ public class MainController {
     private void sair() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Sair");
-        alert.setHeaderText("Deseja realmente sair do sistema?");
-        alert.setContentText("Todos os dados não salvos serão perdidos.");
+        alert.setHeaderText("Confirmar saída");
+        alert.setContentText("Deseja realmente sair do sistema?");
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            // Obter a janela atual através do botão ou outro nó
-            // Mas como alternativa simples, podemos fechar a aplicação
             System.exit(0);
         }
     }
@@ -105,6 +104,14 @@ public class MainController {
     private void mostrarErro(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erro");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
+
+    private void mostrarInfo(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Informação");
         alert.setHeaderText(titulo);
         alert.setContentText(mensagem);
         alert.showAndWait();

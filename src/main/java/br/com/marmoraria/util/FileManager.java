@@ -1,0 +1,166 @@
+package br.com.marmoraria.util;
+
+import br.com.marmoraria.model.Orcamento;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileManager {
+
+    private static final String PASTA_ORCAMENTOS = "orcamentos";
+    private static final Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
+
+    /**
+     * Garante que a pasta de orçamentos existe
+     */
+    public static void garantirPastaOrcamentos() {
+        File pasta = new File(PASTA_ORCAMENTOS);
+        if (!pasta.exists()) {
+            pasta.mkdirs();
+            System.out.println("📁 Pasta de orçamentos criada: " + pasta.getAbsolutePath());
+        }
+    }
+
+    /**
+     * Salva um orçamento em arquivo
+     */
+    public static boolean salvarOrcamento(Orcamento orcamento) {
+        try {
+            garantirPastaOrcamentos();
+
+            // Nome do arquivo: numero_orcamento.json
+            String nomeArquivo = orcamento.getNumeroOrcamento() + ".json";
+            File arquivo = new File(PASTA_ORCAMENTOS, nomeArquivo);
+
+            // Converter para JSON
+            String json = gson.toJson(orcamento);
+
+            // Escrever no arquivo
+            try (FileWriter writer = new FileWriter(arquivo)) {
+                writer.write(json);
+            }
+
+            System.out.println("💾 Orçamento salvo: " + arquivo.getAbsolutePath());
+            return true;
+
+        } catch (IOException e) {
+            System.err.println("❌ Erro ao salvar orçamento: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Carrega um orçamento pelo número
+     */
+    public static Orcamento carregarOrcamento(String numeroOrcamento) {
+        try {
+            File arquivo = new File(PASTA_ORCAMENTOS, numeroOrcamento + ".json");
+            if (!arquivo.exists()) {
+                return null;
+            }
+
+            try (FileReader reader = new FileReader(arquivo)) {
+                Orcamento orcamento = gson.fromJson(reader, Orcamento.class);
+                System.out.println("📂 Orçamento carregado: " + numeroOrcamento);
+                return orcamento;
+            }
+
+        } catch (IOException e) {
+            System.err.println("❌ Erro ao carregar orçamento: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Lista todos os orçamentos salvos
+     */
+    public static List<Orcamento> listarOrcamentos() {
+        List<Orcamento> orcamentos = new ArrayList<>();
+
+        try {
+            garantirPastaOrcamentos();
+            File pasta = new File(PASTA_ORCAMENTOS);
+            File[] arquivos = pasta.listFiles((dir, name) -> name.endsWith(".json"));
+
+            if (arquivos != null) {
+                for (File arquivo : arquivos) {
+                    try (FileReader reader = new FileReader(arquivo)) {
+                        Orcamento orcamento = gson.fromJson(reader, Orcamento.class);
+                        orcamentos.add(orcamento);
+                    } catch (Exception e) {
+                        System.err.println("⚠️ Erro ao ler arquivo: " + arquivo.getName());
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao listar orçamentos: " + e.getMessage());
+        }
+
+        return orcamentos;
+    }
+
+    /**
+     * Lista os nomes dos arquivos de orçamentos
+     */
+    public static List<String> listarNomesOrcamentos() {
+        List<String> nomes = new ArrayList<>();
+
+        try {
+            garantirPastaOrcamentos();
+            File pasta = new File(PASTA_ORCAMENTOS);
+            File[] arquivos = pasta.listFiles((dir, name) -> name.endsWith(".json"));
+
+            if (arquivos != null) {
+                for (File arquivo : arquivos) {
+                    String nome = arquivo.getName().replace(".json", "");
+                    nomes.add(nome);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao listar nomes: " + e.getMessage());
+        }
+
+        return nomes;
+    }
+
+    /**
+     * Deleta um orçamento
+     */
+    public static boolean deletarOrcamento(String numeroOrcamento) {
+        try {
+            File arquivo = new File(PASTA_ORCAMENTOS, numeroOrcamento + ".json");
+            if (arquivo.exists()) {
+                boolean deletado = arquivo.delete();
+                if (deletado) {
+                    System.out.println("🗑️ Orçamento deletado: " + numeroOrcamento);
+                }
+                return deletado;
+            }
+            return false;
+
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao deletar orçamento: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Obtém o caminho completo da pasta de orçamentos
+     */
+    public static String getPastaOrcamentos() {
+        return new File(PASTA_ORCAMENTOS).getAbsolutePath();
+    }
+}

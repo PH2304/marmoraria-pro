@@ -1,41 +1,35 @@
 package br.com.marmoraria.model;
 
-import java.io.Serializable;
+public class Servico {
 
-public class Servico implements Serializable {
-    private String id;
-    private String descricao;
-    private double precoUnitario;
-    private String unidadeMedida; // m, m², unidade, etc.
-    private String categoria; // Corte, Polimento, Instalação, etc.
+    private String codigo;
+    private String nome;
+    private double preco;
+    private String unidade;
+    private String categoria;
 
-    public Servico(String id, String descricao, double precoUnitario,
-                   String unidadeMedida, String categoria) {
-        this.id = id;
-        this.descricao = descricao;
-        this.precoUnitario = precoUnitario;
-        this.unidadeMedida = unidadeMedida;
+    public Servico(String codigo, String nome, double preco, String unidade, String categoria) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.preco = preco;
+        this.unidade = unidade;
         this.categoria = categoria;
     }
 
-    // Getters e Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getNome() {
+        return nome;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public double getPreco() {
+        return preco;
+    }
 
-    public double getPrecoUnitario() { return precoUnitario; }
-    public void setPrecoUnitario(double precoUnitario) { this.precoUnitario = precoUnitario; }
-
-    public String getUnidadeMedida() { return unidadeMedida; }
-    public void setUnidadeMedida(String unidadeMedida) { this.unidadeMedida = unidadeMedida; }
-
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public String getCategoria() {
+        return categoria;
+    }
 
     @Override
     public String toString() {
-        return descricao + " - R$ " + String.format("%.2f", precoUnitario) + " por " + unidadeMedida;
+        return nome;
     }
 }

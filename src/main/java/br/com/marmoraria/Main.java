@@ -1,5 +1,9 @@
 package br.com.marmoraria;
 
+import br.com.marmoraria.view.GestaoBackupView;
+import br.com.marmoraria.view.GestaoOrcamentosView;
+import br.com.marmoraria.view.OrcamentoView;
+import br.com.marmoraria.util.GerenciadorBackup;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,353 +15,463 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        try {
-            System.out.println("🚀 Iniciando Marmoraria Pro (Workaround)...");
+    public void start(Stage stage) {
+        // Criar a interface principal em código Java
+        VBox root = new VBox(15);
+        root.setStyle("-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);");
+        root.setAlignment(Pos.CENTER);
 
-            // Criar layout principal
-            VBox root = new VBox(20);
-            root.setPadding(new Insets(30));
-            root.setAlignment(Pos.TOP_CENTER);
-            root.setStyle("-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);");
+        // Título
+        Label titulo = new Label("MARMORARIA PRO");
+        titulo.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);");
 
-            // Cabeçalho
-            HBox header = new HBox(20);
-            header.setAlignment(Pos.CENTER_LEFT);
+        Label subtitulo = new Label("Sistema Profissional de Orçamentos");
+        subtitulo.setStyle("-fx-font-size: 14px; -fx-text-fill: rgba(255,255,255,0.9);");
 
-            Label icon = new Label("💎");
-            icon.setStyle("-fx-font-size: 48px; -fx-padding: 0 20 0 0;");
+        // Cards container
+        GridPane grid = new GridPane();
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setAlignment(Pos.CENTER);
 
-            VBox titleBox = new VBox(5);
-            Label title = new Label("MARMORARIA PRO");
-            title.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        // ==================== CARDS ====================
 
-            Label subtitle = new Label("Sistema Profissional de Cálculo de Orçamentos");
-            subtitle.setStyle("-fx-font-size: 16px; -fx-text-fill: #7f8c8d;");
+        // Card Calculadora
+        VBox cardCalculadora = criarCard(
+                "🧮",
+                "Calculadora",
+                "Calcule áreas, materiais e custos com precisão profissional.",
+                "#3498db"
+        );
+        cardCalculadora.setOnMouseClicked(e -> abrirCalculadora());
 
-            titleBox.getChildren().addAll(title, subtitle);
-            header.getChildren().addAll(icon, titleBox);
+        // Card Orçamentos
+        VBox cardOrcamentos = criarCard(
+                "📋",
+                "Orçamentos",
+                "Crie e gerencie orçamentos completos para seus clientes.",
+                "#27ae60"
+        );
+        cardOrcamentos.setOnMouseClicked(e -> abrirOrcamentos());
 
-            Separator separator = new Separator();
+        // Card Catálogo
+        VBox cardCatalogo = criarCard(
+                "📚",
+                "Catálogo",
+                "Consulte preços e especificações de todos os materiais.",
+                "#e74c3c"
+        );
+        cardCatalogo.setOnMouseClicked(e -> abrirCatalogo());
 
-            // Grid de funcionalidades
-            GridPane grid = new GridPane();
-            grid.setHgap(20);
-            grid.setVgap(20);
-            grid.setPadding(new Insets(30));
-            grid.setAlignment(Pos.CENTER);
+        // Card Orçamentos Salvos
+        VBox cardOrcamentosSalvos = criarCard(
+                "💾",
+                "Orçamentos Salvos",
+                "Gerencie e visualize todos os orçamentos salvos.",
+                "#9b59b6"
+        );
+        cardOrcamentosSalvos.setOnMouseClicked(e -> abrirGestaoOrcamentos());
 
-            // Card 1: Calculadora
-            VBox cardCalculadora = criarCard("🧮", "Calculadora",
-                    "Cálculo preciso de áreas e materiais", "#3498db");
-            Button btnCalculadora = criarBotaoCard("Abrir Calculadora", "#3498db");
-            btnCalculadora.setOnAction(e -> mostrarCalculadora());
-            cardCalculadora.getChildren().add(btnCalculadora);
+        // Card Backup
+        VBox cardBackup = criarCard(
+                "🔄",
+                "Backup",
+                "Gerencie backups automáticos e restaure dados.",
+                "#16a085"
+        );
+        cardBackup.setOnMouseClicked(e -> abrirGestaoBackup());
 
-            // Card 2: Orçamentos
-            VBox cardOrcamentos = criarCard("💰", "Orçamentos",
-                    "Gestão completa de orçamentos", "#2ecc71");
-            Button btnOrcamentos = criarBotaoCard("Abrir Orçamentos", "#2ecc71");
-            btnOrcamentos.setOnAction(e -> mostrarOrcamentos());
-            cardOrcamentos.getChildren().add(btnOrcamentos);
+        // Card Estatísticas
+        VBox cardEstatisticas = criarCard(
+                "📊",
+                "Estatísticas",
+                "Acompanhe métricas e indicadores do seu negócio.",
+                "#f39c12"
+        );
+        cardEstatisticas.setOnMouseClicked(e -> mostrarInfo("Estatísticas", "Funcionalidade em desenvolvimento!\n\nEm breve você terá gráficos e métricas detalhadas."));
 
-            // Card 3: Catálogo
-            VBox cardCatalogo = criarCard("💎", "Catálogo",
-                    "Materiais e serviços disponíveis", "#e74c3c");
-            Button btnCatalogo = criarBotaoCard("Abrir Catálogo", "#e74c3c");
-            btnCatalogo.setOnAction(e -> mostrarCatalogo());
-            cardCatalogo.getChildren().add(btnCatalogo);
+        // Card Relatórios
+        VBox cardRelatorios = criarCard(
+                "📄",
+                "Relatórios",
+                "Exporte relatórios em PDF e acompanhe seus resultados.",
+                "#9b59b6"
+        );
+        cardRelatorios.setOnMouseClicked(e -> mostrarInfo("Relatórios", "Funcionalidade em desenvolvimento!\n\nEm breve você poderá gerar relatórios completos em PDF."));
 
-            // Card 4: Relatórios
-            VBox cardRelatorios = criarCard("📊", "Relatórios",
-                    "Relatórios e exportação", "#9b59b6");
-            Button btnRelatorios = criarBotaoCard("Gerar Relatórios", "#9b59b6");
-            btnRelatorios.setOnAction(e -> mostrarRelatorios());
-            cardRelatorios.getChildren().add(btnRelatorios);
+        // Card Ajuda
+        VBox cardAjuda = criarCard(
+                "❓",
+                "Ajuda",
+                "Tire dúvidas e aprenda a usar o sistema.",
+                "#3498db"
+        );
+        cardAjuda.setOnMouseClicked(e -> mostrarAjuda());
 
-            // Adicionar cards ao grid
-            grid.add(cardCalculadora, 0, 0);
-            grid.add(cardOrcamentos, 1, 0);
-            grid.add(cardCatalogo, 0, 1);
-            grid.add(cardRelatorios, 1, 1);
+        // Card Sobre
+        VBox cardSobre = criarCard(
+                "ℹ️",
+                "Sobre",
+                "Informações sobre o sistema.",
+                "#95a5a6"
+        );
+        cardSobre.setOnMouseClicked(e -> mostrarSobre());
 
-            // Rodapé
-            HBox footer = new HBox(20);
-            footer.setAlignment(Pos.CENTER_RIGHT);
-            footer.setPadding(new Insets(20, 0, 0, 0));
+        // Card Sair
+        VBox cardSair = criarCard(
+                "🚪",
+                "Sair",
+                "Encerrar o sistema.",
+                "#e74c3c"
+        );
+        cardSair.setOnMouseClicked(e -> sair());
 
-            Button btnSobre = new Button("❓ Sobre");
-            btnSobre.setStyle("-fx-background-color: transparent; -fx-text-fill: #3498db; -fx-font-weight: bold;");
-            btnSobre.setOnAction(e -> mostrarSobre());
+        // ==================== ADICIONAR CARDS AO GRID ====================
+        // Linha 1
+        grid.add(cardCalculadora, 0, 0);
+        grid.add(cardOrcamentos, 1, 0);
+        grid.add(cardCatalogo, 2, 0);
 
-            Button btnSair = new Button("🚪 Sair");
-            btnSair.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
-            btnSair.setOnAction(e -> primaryStage.close());
+        // Linha 2
+        grid.add(cardOrcamentosSalvos, 0, 1);
+        grid.add(cardBackup, 1, 1);
+        grid.add(cardEstatisticas, 2, 1);
 
-            footer.getChildren().addAll(btnSobre, new Separator(), btnSair);
+        // Linha 3
+        grid.add(cardRelatorios, 0, 2);
+        grid.add(cardAjuda, 1, 2);
+        grid.add(cardSobre, 2, 2);
 
-            // Montar layout principal
-            root.getChildren().addAll(header, separator, grid, footer);
+        // Linha 4 - Sair sozinho
+        grid.add(cardSair, 1, 3);
 
-            // Configurar cena
-            Scene scene = new Scene(root, 1000, 650);
+        // Rodapé
+        HBox footer = new HBox();
+        footer.setAlignment(Pos.CENTER);
+        footer.setPadding(new Insets(15, 0, 0, 0));
 
-            // Configurar janela
-            primaryStage.setTitle("Marmoraria Pro - Sistema de Orçamentos");
-            primaryStage.setScene(scene);
-            primaryStage.setMinWidth(900);
-            primaryStage.setMinHeight(600);
+        Label versao = new Label("Versão 2.0.0 | © 2024 Marmoraria Pro");
+        versao.setStyle("-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 10px;");
+        footer.getChildren().add(versao);
 
-            primaryStage.show();
+        root.getChildren().addAll(titulo, subtitulo, grid, footer);
 
-            System.out.println("✅ Aplicação JavaFX funcionando SEM FXML!");
-            System.out.println("🎉 Interface manual carregada com sucesso!");
+        // Configurar cena
+        Scene scene = new Scene(root, 950, 750);
+        stage.setTitle("Marmoraria Pro - Sistema de Orçamentos");
+        stage.setScene(scene);
+        stage.setMinWidth(850);
+        stage.setMinHeight(650);
+        stage.show();
 
-        } catch (Exception e) {
-            System.err.println("❌ ERRO ao criar interface manual:");
-            e.printStackTrace();
-            mostrarErroDialog("Erro", "Não foi possível criar a interface: " + e.getMessage());
-        }
+        // Iniciar backup automático em segundo plano
+        GerenciadorBackup.iniciarBackupAutomatico();
+        System.out.println("🚀 Sistema iniciado com sucesso!");
     }
 
-    private VBox criarCard(String emoji, String titulo, String descricao, String cor) {
-        VBox card = new VBox(15);
-        card.setPadding(new Insets(20));
-        card.setStyle(String.format(
+    /**
+     * Cria um card estilizado
+     */
+    private VBox criarCard(String icone, String titulo, String descricao, String cor) {
+        VBox card = new VBox(8);
+        card.setStyle(
                 "-fx-background-color: white; " +
-                        "-fx-background-radius: 10; " +
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); " +
-                        "-fx-border-radius: 10; " +
-                        "-fx-border-color: %s; " +
-                        "-fx-border-width: 2;",
-                cor
-        ));
-        card.setPrefSize(350, 200);
+                        "-fx-background-radius: 16px; " +
+                        "-fx-padding: 15px; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+        );
+        card.setPrefWidth(240);
+        card.setPrefHeight(180);
 
-        HBox headerCard = new HBox(10);
-        headerCard.setAlignment(Pos.CENTER_LEFT);
+        // Ícone
+        Label iconeLabel = new Label(icone);
+        iconeLabel.setStyle("-fx-font-size: 38px;");
 
-        Label emojiLabel = new Label(emoji);
-        emojiLabel.setStyle("-fx-font-size: 24px;");
-
+        // Título
         Label tituloLabel = new Label(titulo);
-        tituloLabel.setStyle(String.format(
-                "-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: %s;",
-                cor
-        ));
+        tituloLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: " + cor + ";");
 
-        headerCard.getChildren().addAll(emojiLabel, tituloLabel);
-
+        // Descrição
         Label descLabel = new Label(descricao);
+        descLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
         descLabel.setWrapText(true);
-        descLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d;");
 
-        VBox lista = new VBox(8);
-        lista.setPadding(new Insets(10, 0, 0, 0));
+        // Setinha
+        Label seta = new Label("→");
+        seta.setStyle("-fx-font-size: 16px; -fx-text-fill: " + cor + "; -fx-font-weight: bold;");
 
-        if (titulo.equals("Calculadora")) {
-            lista.getChildren().addAll(
-                    new Label("• Cálculo de áreas (m²)"),
-                    new Label("• Conversão mm → metros"),
-                    new Label("• Custo por material"),
-                    new Label("• Serviços de polimento")
-            );
-        } else if (titulo.equals("Orçamentos")) {
-            lista.getChildren().addAll(
-                    new Label("• Cadastro de clientes"),
-                    new Label("• Criação de orçamentos"),
-                    new Label("• Cálculo de margens"),
-                    new Label("• Histórico de vendas")
-            );
-        } else if (titulo.equals("Catálogo")) {
-            lista.getChildren().addAll(
-                    new Label("• Mármores diversos"),
-                    new Label("• Granitos nacionais"),
-                    new Label("• Quartzos e pedras"),
-                    new Label("• Serviços especializados")
-            );
-        } else {
-            lista.getChildren().addAll(
-                    new Label("• Exportação para texto"),
-                    new Label("• Relatórios por período"),
-                    new Label("• Análise de lucratividade"),
-                    new Label("• Estatísticas detalhadas")
-            );
-        }
+        HBox footer = new HBox();
+        footer.setAlignment(Pos.CENTER_RIGHT);
+        footer.getChildren().add(seta);
 
-        card.getChildren().addAll(headerCard, descLabel, lista);
+        card.getChildren().addAll(iconeLabel, tituloLabel, descLabel, footer);
+
+        // Efeito hover
+        card.setOnMouseEntered(e -> {
+            card.setStyle(
+                    "-fx-background-color: white; " +
+                            "-fx-background-radius: 16px; " +
+                            "-fx-padding: 15px; " +
+                            "-fx-cursor: hand; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 20, 0, 0, 10);"
+            );
+            card.setTranslateY(-3);
+        });
+
+        card.setOnMouseExited(e -> {
+            card.setStyle(
+                    "-fx-background-color: white; " +
+                            "-fx-background-radius: 16px; " +
+                            "-fx-padding: 15px; " +
+                            "-fx-cursor: hand; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+            );
+            card.setTranslateY(0);
+        });
+
         return card;
     }
 
-    private Button criarBotaoCard(String texto, String cor) {
-        Button btn = new Button(texto);
-        btn.setStyle(String.format(
-                "-fx-background-color: %s; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-size: 14px; " +
-                        "-fx-padding: 10 25; " +
-                        "-fx-background-radius: 5; " +
-                        "-fx-cursor: hand;",
-                cor
-        ));
-        btn.setMaxWidth(Double.MAX_VALUE);
-        return btn;
-    }
+    /**
+     * Abre a calculadora
+     */
+    private void abrirCalculadora() {
+        try {
+            OrcamentoView orcamentoView = new OrcamentoView();
 
-    private void mostrarCalculadora() {
-        Stage calcStage = new Stage();
-        VBox root = new VBox(15);
-        root.setPadding(new Insets(20));
-        root.setStyle("-fx-background-color: #f8f9fa;");
+            Scene scene = new Scene(orcamentoView, 950, 580);
 
-        Label titulo = new Label("🧮 Calculadora de Mármore");
-        titulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-
-        // Campos de entrada
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(15));
-        grid.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-
-        TextField tfLargura = criarCampoNumerico("mm");
-        TextField tfAltura = criarCampoNumerico("mm");
-        TextField tfQuantidade = criarCampoNumerico("un");
-        tfQuantidade.setText("1");
-        TextField tfPreco = criarCampoNumerico("R$/m²");
-        tfPreco.setText("350.00");
-
-        grid.add(new Label("Largura:"), 0, 0);
-        grid.add(tfLargura, 1, 0);
-        grid.add(new Label("Altura:"), 0, 1);
-        grid.add(tfAltura, 1, 1);
-        grid.add(new Label("Quantidade:"), 0, 2);
-        grid.add(tfQuantidade, 1, 2);
-        grid.add(new Label("Preço do material:"), 0, 3);
-        grid.add(tfPreco, 1, 3);
-
-        // Botões
-        HBox botoes = new HBox(10);
-        Button btnCalcular = criarBotao("📊 Calcular", "#3498db");
-        Button btnLimpar = criarBotao("🔄 Limpar", "#95a5a6");
-
-        // Resultados
-        VBox resultados = new VBox(10);
-        resultados.setPadding(new Insets(15));
-        resultados.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #3498db;");
-
-        Label lblArea = new Label("Área por peça: 0.000 m²");
-        Label lblAreaTotal = new Label("Área total: 0.000 m²");
-        Label lblCusto = new Label("💰 Custo total: R$ 0,00");
-        lblCusto.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #27ae60;");
-
-        resultados.getChildren().addAll(
-                new Label("📈 Resultados:"),
-                new Separator(),
-                lblArea,
-                lblAreaTotal,
-                lblCusto
-        );
-
-        // Ações
-        btnCalcular.setOnAction(e -> {
+            // Tentar adicionar CSS se existir
             try {
-                double largura = Double.parseDouble(tfLargura.getText());
-                double altura = Double.parseDouble(tfAltura.getText());
-                double quantidade = Double.parseDouble(tfQuantidade.getText());
-                double preco = Double.parseDouble(tfPreco.getText());
-
-                double areaUnit = (largura * altura) / 1000000;
-                double areaTotal = areaUnit * quantidade;
-                double custoTotal = areaTotal * preco;
-
-                lblArea.setText(String.format("Área por peça: %.3f m²", areaUnit));
-                lblAreaTotal.setText(String.format("Área total: %.3f m²", areaTotal));
-                lblCusto.setText(String.format("💰 Custo total: R$ %.2f", custoTotal));
-
-            } catch (NumberFormatException ex) {
-                mostrarAlerta("Erro", "Por favor, insira apenas números válidos.");
+                String cssPath = getClass().getResource("/css/styles.css").toExternalForm();
+                scene.getStylesheets().add(cssPath);
+            } catch (Exception e) {
+                // CSS não encontrado, continuar sem
             }
-        });
 
-        btnLimpar.setOnAction(e -> {
-            tfLargura.clear();
-            tfAltura.clear();
-            tfQuantidade.setText("1");
-            tfPreco.setText("350.00");
-            lblArea.setText("Área por peça: 0.000 m²");
-            lblAreaTotal.setText("Área total: 0.000 m²");
-            lblCusto.setText("💰 Custo total: R$ 0,00");
-        });
+            Stage stage = new Stage();
+            stage.setTitle("Calculadora - Marmoraria Pro");
+            stage.setScene(scene);
+            stage.setMinWidth(850);
+            stage.setMinHeight(520);
+            stage.show();
 
-        botoes.getChildren().addAll(btnCalcular, btnLimpar);
-        root.getChildren().addAll(titulo, grid, botoes, resultados);
-
-        Scene scene = new Scene(root, 400, 500);
-        calcStage.setScene(scene);
-        calcStage.setTitle("Calculadora de Mármore");
-        calcStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir calculadora: " + e.getMessage());
+        }
     }
 
-    private TextField criarCampoNumerico(String placeholder) {
-        TextField tf = new TextField();
-        tf.setPromptText(placeholder);
-        tf.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("\\d*(\\.\\d*)?")) {
-                tf.setText(oldVal);
+    /**
+     * Abre a tela de orçamentos
+     */
+    private void abrirOrcamentos() {
+        try {
+            OrcamentoView orcamentoView = new OrcamentoView();
+
+            Scene scene = new Scene(orcamentoView, 950, 580);
+
+            // Tentar adicionar CSS se existir
+            try {
+                String cssPath = getClass().getResource("/css/styles.css").toExternalForm();
+                scene.getStylesheets().add(cssPath);
+            } catch (Exception e) {
+                // CSS não encontrado, continuar sem
             }
-        });
-        return tf;
+
+            Stage stage = new Stage();
+            stage.setTitle("Orçamentos - Marmoraria Pro");
+            stage.setScene(scene);
+            stage.setMinWidth(850);
+            stage.setMinHeight(520);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir orçamentos: " + e.getMessage());
+        }
     }
 
-    private Button criarBotao(String texto, String cor) {
-        Button btn = new Button(texto);
-        btn.setStyle(String.format(
-                "-fx-background-color: %s; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-padding: 10 20; " +
-                        "-fx-background-radius: 5;",
-                cor
-        ));
-        return btn;
+    /**
+     * Abre o catálogo de materiais
+     */
+    private void abrirCatalogo() {
+        try {
+            VBox catalogoView = new VBox(12);
+            catalogoView.setStyle("-fx-padding: 25; -fx-background-color: #ecf0f1;");
+            catalogoView.setAlignment(Pos.TOP_CENTER);
+
+            Label titulo = new Label("📚 Catálogo de Materiais");
+            titulo.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+            Label mensagem = new Label(
+                    "📦 MATERIAIS DISPONÍVEIS:\n\n" +
+                            "• Granito Preto Absoluto\n" +
+                            "  Preço: R$ 350,00/m²\n" +
+                            "  Espessura: 20mm\n\n" +
+
+                            "• Granito Verde Ubatuba\n" +
+                            "  Preço: R$ 280,00/m²\n" +
+                            "  Espessura: 20mm\n\n" +
+
+                            "• Mármore Carrara\n" +
+                            "  Preço: R$ 520,00/m²\n" +
+                            "  Espessura: 20mm\n\n" +
+
+                            "• Quartzo Branco\n" +
+                            "  Preço: R$ 650,00/m²\n" +
+                            "  Espessura: 20mm\n\n" +
+
+                            "🔧 SERVIÇOS DISPONÍVEIS:\n\n" +
+                            "• Corte reto - R$ 40,00/m\n" +
+                            "• Polimento simples - R$ 60,00/m²\n" +
+                            "• Instalação padrão - R$ 250,00/un\n\n" +
+
+                            "✨ Mais materiais em breve!"
+            );
+            mensagem.setStyle("-fx-font-size: 13px; -fx-text-fill: #2c3e50;");
+            mensagem.setWrapText(true);
+
+            Button fechar = new Button("Fechar");
+            fechar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 20; -fx-font-weight: bold;");
+            fechar.setOnAction(e -> ((Stage) fechar.getScene().getWindow()).close());
+
+            catalogoView.getChildren().addAll(titulo, mensagem, fechar);
+
+            Scene scene = new Scene(catalogoView, 650, 500);
+            Stage stage = new Stage();
+            stage.setTitle("Catálogo - Marmoraria Pro");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir catálogo: " + e.getMessage());
+        }
     }
 
-    private void mostrarOrcamentos() {
-        mostrarAlerta("💰 Orçamentos", "Módulo em desenvolvimento!");
+    /**
+     * Abre a tela de gestão de orçamentos salvos
+     */
+    private void abrirGestaoOrcamentos() {
+        try {
+            GestaoOrcamentosView gestaoView = new GestaoOrcamentosView();
+            Scene scene = new Scene(gestaoView, 900, 650);
+            Stage stage = new Stage();
+            stage.setTitle("Gestão de Orçamentos Salvos");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir gestão de orçamentos: " + e.getMessage());
+        }
     }
 
-    private void mostrarCatalogo() {
-        mostrarAlerta("💎 Catálogo",
-                "Materiais disponíveis:\n\n" +
-                        "1. Mármore Carrara - R$ 450,00/m²\n" +
-                        "2. Granito Preto - R$ 380,00/m²\n" +
-                        "3. Quartzo Branco - R$ 650,00/m²\n" +
-                        "4. Granito Verde - R$ 420,00/m²");
+    /**
+     * Abre a tela de gerenciamento de backups
+     */
+    private void abrirGestaoBackup() {
+        try {
+            GestaoBackupView backupView = new GestaoBackupView();
+            Scene scene = new Scene(backupView, 900, 600);
+            Stage stage = new Stage();
+            stage.setTitle("Gerenciamento de Backups");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir gerenciamento de backups: " + e.getMessage());
+        }
     }
 
-    private void mostrarRelatorios() {
-        mostrarAlerta("📊 Relatórios", "Módulo em desenvolvimento!");
-    }
-
-    private void mostrarSobre() {
+    /**
+     * Mostra a tela de ajuda
+     */
+    private void mostrarAjuda() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Sobre o Sistema");
-        alert.setHeaderText("Marmoraria Pro v1.0");
+        alert.setTitle("Ajuda - Marmoraria Pro");
+        alert.setHeaderText("📚 Guia Rápido do Sistema");
         alert.setContentText(
-                "✅ Sistema JavaFX funcionando!\n\n" +
-                        "Tecnologias:\n" +
-                        "• Java " + System.getProperty("java.version") + "\n" +
-                        "• JavaFX (Interface manual)\n" +
-                        "• Maven\n\n" +
-                        "🎯 Sistema de cálculo de orçamentos para marmoraria\n\n" +
-                        "© 2024 - Interface criada programaticamente"
+                "═══════════════════════════════════════\n" +
+                        "       MARMORARIA PRO - AJUDA\n" +
+                        "═══════════════════════════════════════\n\n" +
+
+                        "📌 CALCULADORA\n" +
+                        "• Selecione um material no catálogo\n" +
+                        "• Informe as dimensões (largura x comprimento em mm)\n" +
+                        "• Informe a quantidade de peças\n" +
+                        "• Clique em 'Adicionar Item'\n" +
+                        "• O sistema calcula automaticamente:\n" +
+                        "  - Área em m²\n" +
+                        "  - Custo total do material\n" +
+                        "  - Total geral do orçamento\n\n" +
+
+                        "💾 SALVAR ORÇAMENTO\n" +
+                        "• Após adicionar os itens, clique em 'Salvar Orçamento'\n" +
+                        "• Os orçamentos são salvos na pasta 'orcamentos/'\n" +
+                        "• Use a tela 'Orçamentos Salvos' para gerenciar\n\n" +
+
+                        "🔄 BACKUP\n" +
+                        "• Backups automáticos são feitos a cada 24 horas\n" +
+                        "• Mantém os últimos 30 backups\n" +
+                        "• Você pode criar backups manuais a qualquer momento\n" +
+                        "• Restaurar backups é simples e seguro\n\n" +
+
+                        "💡 DICAS:\n" +
+                        "• Sempre confira as medidas antes de adicionar\n" +
+                        "• Use o botão 'Excluir' para remover itens\n" +
+                        "• O total é atualizado automaticamente\n\n" +
+
+                        "Suporte: suporte@marmorariapro.com.br"
         );
+        alert.getDialogPane().setPrefWidth(500);
         alert.showAndWait();
     }
 
-    private void mostrarAlerta(String titulo, String mensagem) {
+    /**
+     * Mostra informações sobre o sistema
+     */
+    private void mostrarSobre() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sobre o Sistema");
+        alert.setHeaderText("Marmoraria Pro");
+        alert.setContentText(
+                "═══════════════════════════════════════\n" +
+                        "       MARMORARIA PRO v2.0.0\n" +
+                        "═══════════════════════════════════════\n\n" +
+
+                        "🏢 Sistema Profissional para Marmorarias\n\n" +
+
+                        "✨ FUNCIONALIDADES:\n" +
+                        "• Cálculo preciso de áreas e custos\n" +
+                        "• Catálogo de materiais (mármore, granito, quartzo)\n" +
+                        "• Gestão completa de orçamentos\n" +
+                        "• Salvar e carregar orçamentos\n" +
+                        "• Backup automático dos dados\n" +
+                        "• Interface moderna e intuitiva\n\n" +
+
+                        "👨‍💻 DESENVOLVIDO COM:\n" +
+                        "• Java 11+\n" +
+                        "• JavaFX\n" +
+                        "• Maven\n" +
+                        "• Gson para JSON\n\n" +
+
+                        "📞 SUPORTE:\n" +
+                        "• Email: suporte@marmorariapro.com.br\n" +
+                        "• Telefone: (11) 99999-9999\n\n" +
+
+                        "© 2024 - Todos os direitos reservados\n" +
+                        "═══════════════════════════════════════"
+        );
+        alert.getDialogPane().setPrefWidth(450);
+        alert.showAndWait();
+    }
+
+    /**
+     * Mostra uma mensagem informativa
+     */
+    private void mostrarInfo(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
@@ -365,17 +479,33 @@ public class Main extends Application {
         alert.showAndWait();
     }
 
-    private void mostrarErroDialog(String titulo, String mensagem) {
+    /**
+     * Mostra uma mensagem de erro
+     */
+    private void mostrarErro(String mensagem) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titulo);
-        alert.setHeaderText("Erro Crítico");
+        alert.setTitle("Erro");
+        alert.setHeaderText("Ops! Algo deu errado");
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
 
+    /**
+     * Confirma e sai do sistema
+     */
+    private void sair() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sair");
+        alert.setHeaderText("Confirmar saída");
+        alert.setContentText("Deseja realmente sair do sistema?\n\nTodos os dados não salvos serão perdidos.");
+
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            System.out.println("👋 Sistema encerrado!");
+            System.exit(0);
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println("🚀 Iniciando Marmoraria Pro...");
-        System.out.println("Java Version: " + System.getProperty("java.version"));
         launch(args);
     }
 }

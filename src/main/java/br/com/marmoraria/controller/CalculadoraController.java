@@ -1,216 +1,231 @@
 package br.com.marmoraria.controller;
 
-import br.com.marmoraria.model.*;
+import br.com.marmoraria.model.ItemOrcamento;
+import br.com.marmoraria.model.Material;
+import br.com.marmoraria.model.Servico;
 import br.com.marmoraria.service.MaterialService;
-import br.com.marmoraria.service.OrcamentoService;
-import javafx.beans.property.SimpleStringProperty;
+
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.text.DecimalFormat;
-
 public class CalculadoraController {
 
-    // ===== FXML =====
-    @FXML private ComboBox<String> cbTipoMaterial;
-    @FXML private ComboBox<Material> cbMaterial;
-    @FXML private ComboBox<String> cbCategoriaServico;
-    @FXML private ComboBox<Servico> cbServico;
+    // ================= FXML =================
 
-    @FXML private TextField txtLargura;
-    @FXML private TextField txtComprimento;
-    @FXML private TextField txtQuantidade;
+    @FXML
+    private ComboBox<Material> cbMaterial;
 
-    @FXML private TableView<ItemOrcamento> tabelaOrcamento;
-    @FXML private TableColumn<ItemOrcamento, String> colMaterial;
-    @FXML private TableColumn<ItemOrcamento, String> colServico;
-    @FXML private TableColumn<ItemOrcamento, String> colDimensoes;
-    @FXML private TableColumn<ItemOrcamento, Integer> colQuantidade;
-    @FXML private TableColumn<ItemOrcamento, Double> colArea;
-    @FXML private TableColumn<ItemOrcamento, Double> colTotal;
+    @FXML
+    private ComboBox<Servico> cbServico;
 
-    @FXML private Label lblTotalOrcamento;
+    @FXML
+    private TextField txtLargura;
 
-    // ===== NEGÓCIO =====
+    @FXML
+    private TextField txtComprimento;
+
+    @FXML
+    private TextField txtQuantidade;
+
+    @FXML
+    private TableView<ItemOrcamento> tabela;
+
+    @FXML
+    private TableColumn<ItemOrcamento, Double> colArea;
+
+    @FXML
+    private TableColumn<ItemOrcamento, Double> colTotal;
+
+    @FXML
+    private TableColumn<ItemOrcamento, Void> colAcao;
+
+    @FXML
+    private Label lblTotalGeral;
+
+    // ================= SERVICES =================
+
     private final MaterialService materialService = new MaterialService();
-    private final OrcamentoService orcamentoService = new OrcamentoService();
-    private final Orcamento orcamentoAtual = new Orcamento(); // construtor vazio
-    private final DecimalFormat df = new DecimalFormat("#,##0.00");
 
-    // ===== INIT =====
+    // ================= DADOS =================
+
+    private final ObservableList<ItemOrcamento> itens = FXCollections.observableArrayList();
+
+    private ItemOrcamento itemEmEdicao = null;
+
+    // ================= INITIALIZE =================
+
     @FXML
     public void initialize() {
-        cbMaterial.setCellFactory(cb -> new ListCell<Material>() {
-            @Override
-            protected void updateItem(Material item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(
-                            item.getNome() +
-                                    " | R$ " +
-                                    String.format("%.2f", item.getPrecoPorMetroQuadrado()) +
-                                    " / m²"
-                    );
-                }
-            }
-        });
 
-// texto exibido quando o ComboBox está fechado
-        cbMaterial.setButtonCell(cbMaterial.getCellFactory().call(null));
+        // ComboBox
+        cbMaterial.setItems(FXCollections.observableArrayList(
+                materialService.getTodosMateriais()
+        ));
 
-        configurarCombos();
-        configurarCampos();
-        configurarTabela();
-        atualizarTotal();
+        cbServico.setItems(FXCollections.observableArrayList(
+                materialService.getTodosServicos()
+        ));
+
+        // Tabela
+        colArea.setCellValueFactory(new PropertyValueFactory<>("area"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        tabela.setItems(itens);
+
+        configurarBotaoRemover();
+        configurarEdicaoPorDuploClique();
+
+        atualizarTotalGeral();
     }
 
-    // ===== COMBOS =====
-    private void configurarCombos() {
+    // ================= ADICIONAR / EDITAR =================
 
-        cbTipoMaterial.setItems(
-                FXCollections.observableArrayList(materialService.getTiposMateriais())
-        );
-        cbTipoMaterial.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, newVal) -> {
-                    if (newVal != null) {
-                        cbMaterial.setItems(
-                                FXCollections.observableArrayList(
-                                        materialService.getMateriaisPorTipo(newVal)
-                                )
-                        );
-                    }
-                }
-        );
-
-        cbCategoriaServico.setItems(
-                FXCollections.observableArrayList(materialService.getCategoriasServicos())
-        );
-        cbCategoriaServico.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, newVal) -> {
-                    if (newVal != null) {
-                        cbServico.setItems(
-                                FXCollections.observableArrayList(
-                                        materialService.getServicosPorCategoria(newVal)
-                                )
-                        );
-                    }
-                }
-        );
-
-        if (!cbTipoMaterial.getItems().isEmpty()) {
-            cbTipoMaterial.getSelectionModel().selectFirst();
-        }
-
-        if (!cbCategoriaServico.getItems().isEmpty()) {
-            cbCategoriaServico.getSelectionModel().selectFirst();
-        }
-    }
-
-    // ===== VALIDADORES =====
-    private void configurarCampos() {
-        permitirNumeros(txtLargura);
-        permitirNumeros(txtComprimento);
-        permitirInteiro(txtQuantidade);
-    }
-
-    private void permitirNumeros(TextField tf) {
-        tf.textProperty().addListener((obs, oldV, newV) -> {
-            if (!newV.matches("\\d*(\\.\\d*)?")) {
-                tf.setText(oldV);
-            }
-        });
-    }
-
-    private void permitirInteiro(TextField tf) {
-        tf.textProperty().addListener((obs, oldV, newV) -> {
-            if (!newV.matches("\\d*")) {
-                tf.setText(oldV);
-            }
-        });
-    }
-
-    // ===== TABELA =====
-    private void configurarTabela() {
-
-        colMaterial.setCellValueFactory(c ->
-                new SimpleStringProperty(c.getValue().getMaterial().getNome())
-        );
-
-        colServico.setCellValueFactory(c ->
-                new SimpleStringProperty(c.getValue().getServico().getDescricao())
-        );
-
-        colDimensoes.setCellValueFactory(c ->
-                new SimpleStringProperty(
-                        String.format("%.0f x %.0f",
-                                c.getValue().getLarguraMm(),
-                                c.getValue().getComprimentoMm())
-                )
-        );
-
-        colQuantidade.setCellValueFactory(
-                new PropertyValueFactory<>("quantidade")
-        );
-        colArea.setCellValueFactory(
-                new PropertyValueFactory<>("areaM2")
-        );
-        colTotal.setCellValueFactory(
-                new PropertyValueFactory<>("valorTotal")
-        );
-
-        tabelaOrcamento.setItems(
-                FXCollections.observableList(orcamentoAtual.getItens())
-        );
-    }
-
-    // ===== AÇÃO =====
     @FXML
     private void adicionarItem() {
+
         try {
-            ItemOrcamento item = new ItemOrcamento(
-                    cbMaterial.getValue(),
-                    cbServico.getValue(),
-                    Integer.parseInt(txtQuantidade.getText()),
-                    Double.parseDouble(txtLargura.getText()),
-                    Double.parseDouble(txtComprimento.getText()),
-                    ""
+
+            Material material = cbMaterial.getValue();
+            Servico servico = cbServico.getValue();
+
+            if (material == null) {
+                mostrarErro("Selecione um material.");
+                return;
+            }
+
+            double largura = Double.parseDouble(txtLargura.getText());
+            double comprimento = Double.parseDouble(txtComprimento.getText());
+            int quantidade = Integer.parseInt(txtQuantidade.getText());
+
+            double area = (largura * comprimento) / 1_000_000.0;
+            double total = area * material.getPrecoPorMetroQuadrado() * quantidade;
+
+            ItemOrcamento novoItem = new ItemOrcamento(
+                    material,
+                    servico,
+                    largura,
+                    comprimento,
+                    quantidade,
+                    area,
+                    total
             );
 
-            orcamentoService.adicionarItem(orcamentoAtual, item);
-            tabelaOrcamento.refresh();
-            atualizarTotal();
+            if (itemEmEdicao != null) {
+
+                int index = itens.indexOf(itemEmEdicao);
+                itens.set(index, novoItem);
+                itemEmEdicao = null;
+
+            } else {
+
+                itens.add(novoItem);
+            }
+
+            atualizarTotalGeral();
             limparCampos();
 
         } catch (Exception e) {
-            mostrarAlerta("Erro", "Preencha todos os campos corretamente.");
+            mostrarErro("Erro ao adicionar/editar item.");
         }
     }
 
-    // ===== TOTAL =====
-    private void atualizarTotal() {
-        lblTotalOrcamento.setText(
-                "R$ " + df.format(
-                        orcamentoService.calcularValorTotal(orcamentoAtual)
-                )
-        );
+    // ================= REMOVER =================
+
+    private void configurarBotaoRemover() {
+
+        colAcao.setCellFactory(param -> new TableCell<>() {
+
+            private final Button btn = new Button("Excluir");
+
+            {
+                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+
+                btn.setOnAction(event -> {
+                    ItemOrcamento item = getTableView().getItems().get(getIndex());
+
+                    itens.remove(item);
+                    atualizarTotalGeral();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+        });
     }
+
+    // ================= EDIÇÃO =================
+
+    private void configurarEdicaoPorDuploClique() {
+
+        tabela.setRowFactory(tv -> {
+            TableRow<ItemOrcamento> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+
+                    ItemOrcamento item = row.getItem();
+                    carregarItemParaEdicao(item);
+                }
+            });
+
+            return row;
+        });
+    }
+
+    private void carregarItemParaEdicao(ItemOrcamento item) {
+
+        itemEmEdicao = item;
+
+        cbMaterial.setValue(item.getMaterial());
+        cbServico.setValue(item.getServico());
+
+        txtLargura.setText(String.valueOf(item.getLargura()));
+        txtComprimento.setText(String.valueOf(item.getComprimento()));
+        txtQuantidade.setText(String.valueOf(item.getQuantidade()));
+    }
+
+    // ================= TOTAL =================
+
+    private void atualizarTotalGeral() {
+
+        double total = 0;
+
+        for (ItemOrcamento item : itens) {
+            total += item.getTotal();
+        }
+
+        lblTotalGeral.setText(String.format("TOTAL: R$ %.2f", total));
+    }
+
+    // ================= UTIL =================
 
     private void limparCampos() {
         txtLargura.clear();
         txtComprimento.clear();
         txtQuantidade.clear();
+        itemEmEdicao = null;
     }
 
-    // ===== ALERTA =====
-    private void mostrarAlerta(String titulo, String msg) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Atenção");
-        alert.setHeaderText(titulo);
-        alert.setContentText(msg);
+    private void mostrarErro(String mensagem) {
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        alert.setTitle("Erro");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+
         alert.showAndWait();
     }
 }

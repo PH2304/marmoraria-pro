@@ -52,4 +52,42 @@
                style="-fx-font-weight: bold; -fx-font-size: 16px"/>
     </HBox>
 
+    <Label fx:id="lblTotalGeral"
+           text="TOTAL: R$ 0,00"
+           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;"/>
+
+    <VBox spacing="8">
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="Subtotal:"/>
+            <Label fx:id="lblSubtotal" text="R$ 0,00"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="Desconto (%):"/>
+            <TextField fx:id="txtDesconto" prefWidth="80"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="Total com Desconto:"/>
+            <Label fx:id="lblTotalComDesconto" text="R$ 0,00"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="Margem de Lucro (%):"/>
+            <TextField fx:id="txtMargem" prefWidth="80"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="TOTAL FINAL:" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblTotalFinal"
+                   text="R$ 0,00"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;"/>
+        </HBox>
+    </VBox>
+
+    <Button text="Gerar PDF"
+            onAction="#gerarPDF"
+            style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-weight: bold;"
+            prefWidth="150"/>
 </VBox>

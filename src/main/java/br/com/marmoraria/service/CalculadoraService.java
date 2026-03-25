@@ -2,15 +2,15 @@ package br.com.marmoraria.service;
 
 public class CalculadoraService {
 
-    private CalculadoraService() {}
+    public double calcularArea(double largura, double altura) {
+        return (largura * altura) / 1000000;
+    }
 
-    public static double calcularArea(
-            double larguraMm,
-            double comprimentoMm,
-            int quantidade
-    ) {
-        return (larguraMm / 1000.0)
-                * (comprimentoMm / 1000.0)
-                * quantidade;
+    public double calcularMaterial(double area, int qtd, double preco) {
+        return area * qtd * preco;
+    }
+
+    public double calcularPerimetro(double largura, double altura) {
+        return 2 * ((largura + altura) / 1000);
     }
 }
