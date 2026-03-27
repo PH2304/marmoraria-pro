@@ -1,0 +1,80 @@
+{
+  "id": "b4cae2ab-fc09-4dd9-903e-ea2ad7d22fc2",
+  "numeroOrcamento": "ORC-20260325203249",
+  "dataCriacao": "2026-03-25T20:32:49.0474831",
+  "margemLucro": 30.0,
+  "itens": [
+    {
+      "material": {
+        "id": "M03",
+        "nome": "Mármore Carrara",
+        "tipo": "Mármore",
+        "precoPorMetroQuadrado": 520.0,
+        "espessura": 20.0,
+        "origem": "Itália",
+        "descricao": "Mármore importado clássico"
+      },
+      "servico": {
+        "codigo": "S03",
+        "nome": "Instalação padrão",
+        "preco": 250.0,
+        "unidade": "un",
+        "categoria": "Instalação"
+      },
+      "largura": 860.0,
+      "comprimento": 850.0,
+      "quantidade": 3,
+      "area": 0.731,
+      "total": 1140.3600000000001
+    },
+    {
+      "material": {
+        "id": "M02",
+        "nome": "Granito Verde Ubatuba",
+        "tipo": "Granito",
+        "precoPorMetroQuadrado": 280.0,
+        "espessura": 20.0,
+        "origem": "Brasil",
+        "descricao": "Granito de tom esverdeado"
+      },
+      "servico": {
+        "codigo": "S02",
+        "nome": "Polimento simples",
+        "preco": 60.0,
+        "unidade": "m²",
+        "categoria": "Polimento"
+      },
+      "largura": 3500.0,
+      "comprimento": 4200.0,
+      "quantidade": 1,
+      "area": 14.7,
+      "total": 4116.0
+    },
+    {
+      "material": {
+        "id": "M01",
+        "nome": "Granito Preto Absoluto",
+        "tipo": "Granito",
+        "precoPorMetroQuadrado": 350.0,
+        "espessura": 20.0,
+        "origem": "Brasil",
+        "descricao": "Granito nacional de alta resistência"
+      },
+      "servico": {
+        "codigo": "S01",
+        "nome": "Corte reto",
+        "preco": 40.0,
+        "unidade": "m",
+        "categoria": "Corte"
+      },
+      "largura": 6400.0,
+      "comprimento": 3600.0,
+      "quantidade": 1,
+      "area": 23.04,
+      "total": 8064.0
+    }
+  ],
+  "valorTotal": 13320.36,
+  "valorComLucro": 17316.468,
+  "status": "Rascunho"
+}

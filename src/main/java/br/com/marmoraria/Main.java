@@ -1,5 +1,6 @@
 package br.com.marmoraria;
 
+import br.com.marmoraria.view.ConfiguracoesView;
 import br.com.marmoraria.view.GestaoBackupView;
 import br.com.marmoraria.view.GestaoOrcamentosView;
 import br.com.marmoraria.view.OrcamentoView;
@@ -81,6 +82,15 @@ public class Main extends Application {
         );
         cardBackup.setOnMouseClicked(e -> abrirGestaoBackup());
 
+        // Card Configurações
+        VBox cardConfiguracoes = criarCard(
+                "⚙️",
+                "Configurações",
+                "Personalize o sistema conforme suas preferências.",
+                "#95a5a6"
+        );
+        cardConfiguracoes.setOnMouseClicked(e -> abrirConfiguracoes());
+
         // Card Estatísticas
         VBox cardEstatisticas = criarCard(
                 "📊",
@@ -135,15 +145,16 @@ public class Main extends Application {
         // Linha 2
         grid.add(cardOrcamentosSalvos, 0, 1);
         grid.add(cardBackup, 1, 1);
-        grid.add(cardEstatisticas, 2, 1);
+        grid.add(cardConfiguracoes, 2, 1);
 
         // Linha 3
-        grid.add(cardRelatorios, 0, 2);
-        grid.add(cardAjuda, 1, 2);
-        grid.add(cardSobre, 2, 2);
+        grid.add(cardEstatisticas, 0, 2);
+        grid.add(cardRelatorios, 1, 2);
+        grid.add(cardAjuda, 2, 2);
 
-        // Linha 4 - Sair sozinho
-        grid.add(cardSair, 1, 3);
+        // Linha 4
+        grid.add(cardSobre, 1, 3);
+        grid.add(cardSair, 2, 3);
 
         // Rodapé
         HBox footer = new HBox();
@@ -157,11 +168,11 @@ public class Main extends Application {
         root.getChildren().addAll(titulo, subtitulo, grid, footer);
 
         // Configurar cena
-        Scene scene = new Scene(root, 950, 750);
+        Scene scene = new Scene(root, 950, 800);
         stage.setTitle("Marmoraria Pro - Sistema de Orçamentos");
         stage.setScene(scene);
         stage.setMinWidth(850);
-        stage.setMinHeight(650);
+        stage.setMinHeight(700);
         stage.show();
 
         // Iniciar backup automático em segundo plano
@@ -240,7 +251,7 @@ public class Main extends Application {
         try {
             OrcamentoView orcamentoView = new OrcamentoView();
 
-            Scene scene = new Scene(orcamentoView, 950, 580);
+            Scene scene = new Scene(orcamentoView, 950, 650);
 
             // Tentar adicionar CSS se existir
             try {
@@ -254,7 +265,7 @@ public class Main extends Application {
             stage.setTitle("Calculadora - Marmoraria Pro");
             stage.setScene(scene);
             stage.setMinWidth(850);
-            stage.setMinHeight(520);
+            stage.setMinHeight(600);
             stage.show();
 
         } catch (Exception e) {
@@ -270,7 +281,7 @@ public class Main extends Application {
         try {
             OrcamentoView orcamentoView = new OrcamentoView();
 
-            Scene scene = new Scene(orcamentoView, 950, 580);
+            Scene scene = new Scene(orcamentoView, 950, 650);
 
             // Tentar adicionar CSS se existir
             try {
@@ -284,7 +295,7 @@ public class Main extends Application {
             stage.setTitle("Orçamentos - Marmoraria Pro");
             stage.setScene(scene);
             stage.setMinWidth(850);
-            stage.setMinHeight(520);
+            stage.setMinHeight(600);
             stage.show();
 
         } catch (Exception e) {
@@ -386,6 +397,23 @@ public class Main extends Application {
     }
 
     /**
+     * Abre a tela de configurações
+     */
+    private void abrirConfiguracoes() {
+        try {
+            ConfiguracoesView configView = new ConfiguracoesView();
+            Scene scene = new Scene(configView, 900, 650);
+            Stage stage = new Stage();
+            stage.setTitle("Configurações - Marmoraria Pro");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir configurações: " + e.getMessage());
+        }
+    }
+
+    /**
      * Mostra a tela de ajuda
      */
     private void mostrarAjuda() {
@@ -418,6 +446,11 @@ public class Main extends Application {
                         "• Você pode criar backups manuais a qualquer momento\n" +
                         "• Restaurar backups é simples e seguro\n\n" +
 
+                        "⚙️ CONFIGURAÇÕES\n" +
+                        "• Personalize margens, descontos e prazos\n" +
+                        "• Configure notificações e aparência\n" +
+                        "• Defina dados da empresa\n\n" +
+
                         "💡 DICAS:\n" +
                         "• Sempre confira as medidas antes de adicionar\n" +
                         "• Use o botão 'Excluir' para remover itens\n" +
@@ -449,13 +482,15 @@ public class Main extends Application {
                         "• Gestão completa de orçamentos\n" +
                         "• Salvar e carregar orçamentos\n" +
                         "• Backup automático dos dados\n" +
+                        "• Configurações personalizáveis\n" +
                         "• Interface moderna e intuitiva\n\n" +
 
                         "👨‍💻 DESENVOLVIDO COM:\n" +
                         "• Java 11+\n" +
                         "• JavaFX\n" +
                         "• Maven\n" +
-                        "• Gson para JSON\n\n" +
+                        "• Gson para JSON\n" +
+                        "• iText para PDF\n\n" +
 
                         "📞 SUPORTE:\n" +
                         "• Email: suporte@marmorariapro.com.br\n" +

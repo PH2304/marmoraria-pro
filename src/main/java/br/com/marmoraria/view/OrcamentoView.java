@@ -5,13 +5,16 @@ import br.com.marmoraria.model.Material;
 import br.com.marmoraria.model.Servico;
 import br.com.marmoraria.service.CalculadoraService;
 import br.com.marmoraria.service.MaterialService;
+import br.com.marmoraria.util.GeradorPDF;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 public class OrcamentoView extends BorderPane {
 
@@ -20,12 +23,23 @@ public class OrcamentoView extends BorderPane {
     private ObservableList<ItemOrcamento> itens = FXCollections.observableArrayList();
     private Label totalLabel = new Label("Total: R$ 0,00");
 
+    // Componentes de dados do cliente
+    private TextField txtClienteNome;
+    private TextField txtClienteTelefone;
+    private TextField txtClienteEmail;
+    private TextField txtEnderecoObra;
+    private TextArea txtObservacoes;
+
     // Services
     private final CalculadoraService calc = new CalculadoraService();
     private final MaterialService materialService = new MaterialService();
 
     public OrcamentoView() {
-        setPadding(new Insets(20));
+        setPadding(new Insets(15));
+        setStyle("-fx-background-color: #ecf0f1;");
+
+        // Painel de dados do cliente
+        VBox painelCliente = criarPainelCliente();
 
         // Painel esquerdo (entrada de dados)
         VBox painelEntrada = criarPainelEntrada();
@@ -36,19 +50,61 @@ public class OrcamentoView extends BorderPane {
         // Rodapé
         HBox rodape = criarRodape();
 
-        setLeft(painelEntrada);
+        // Layout: Cliente + Entrada na esquerda
+        VBox painelEsquerdo = new VBox(15);
+        painelEsquerdo.getChildren().addAll(painelCliente, painelEntrada);
+
+        setLeft(painelEsquerdo);
         setCenter(painelTabela);
         setBottom(rodape);
+    }
+
+    /**
+     * Cria o painel de dados do cliente
+     */
+    private VBox criarPainelCliente() {
+        VBox box = new VBox(10);
+        box.setPadding(new Insets(10));
+        box.setPrefWidth(280);
+        box.setStyle("-fx-background-color: white; -fx-background-radius: 12px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+
+        Label titulo = new Label("👤 DADOS DO CLIENTE");
+        titulo.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+        txtClienteNome = new TextField();
+        txtClienteNome.setPromptText("Nome do Cliente");
+        txtClienteNome.setPrefWidth(250);
+
+        txtClienteTelefone = new TextField();
+        txtClienteTelefone.setPromptText("Telefone");
+        txtClienteTelefone.setPrefWidth(250);
+
+        txtClienteEmail = new TextField();
+        txtClienteEmail.setPromptText("E-mail");
+        txtClienteEmail.setPrefWidth(250);
+
+        txtEnderecoObra = new TextField();
+        txtEnderecoObra.setPromptText("Endereço da Obra");
+        txtEnderecoObra.setPrefWidth(250);
+
+        txtObservacoes = new TextArea();
+        txtObservacoes.setPromptText("Observações (opcional)");
+        txtObservacoes.setPrefHeight(80);
+        txtObservacoes.setWrapText(true);
+
+        box.getChildren().addAll(titulo, txtClienteNome, txtClienteTelefone,
+                txtClienteEmail, txtEnderecoObra, txtObservacoes);
+        return box;
     }
 
     private VBox criarPainelEntrada() {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
         box.setPrefWidth(280);
-        box.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10;");
+        box.setStyle("-fx-background-color: white; -fx-background-radius: 12px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
 
-        Label titulo = new Label("📦 Dados da Peça");
-        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        Label titulo = new Label("📦 DADOS DA PEÇA");
+        titulo.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
         ComboBox<Material> cbMaterial = new ComboBox<>();
         cbMaterial.setItems(FXCollections.observableArrayList(materialService.getTodosMateriais()));
@@ -118,10 +174,10 @@ public class OrcamentoView extends BorderPane {
 
     private VBox criarPainelTabela() {
         VBox box = new VBox(10);
-        box.setPadding(new Insets(0, 0, 0, 20));
+        box.setPadding(new Insets(0, 0, 0, 15));
 
-        Label titulo = new Label("📋 Itens do Orçamento");
-        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        Label titulo = new Label("📋 ITENS DO ORÇAMENTO");
+        titulo.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
         // Configurar colunas
         TableColumn<ItemOrcamento, String> colMaterial = new TableColumn<>("Material");
@@ -163,7 +219,7 @@ public class OrcamentoView extends BorderPane {
         colAcao.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button("🗑️");
             {
-                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
                 btn.setOnAction(e -> {
                     ItemOrcamento item = getTableView().getItems().get(getIndex());
                     itens.remove(item);
@@ -180,7 +236,8 @@ public class OrcamentoView extends BorderPane {
 
         tabela.getColumns().addAll(colMaterial, colServico, colDimensoes, colQuantidade, colArea, colTotal, colAcao);
         tabela.setItems(itens);
-        tabela.setPrefHeight(400);
+        tabela.setPrefHeight(450);
+        tabela.setStyle("-fx-background-color: white; -fx-background-radius: 8px;");
 
         box.getChildren().addAll(titulo, tabela);
         return box;
@@ -190,7 +247,7 @@ public class OrcamentoView extends BorderPane {
         HBox rodape = new HBox(15);
         rodape.setPadding(new Insets(15, 10, 10, 10));
         rodape.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10;");
-        rodape.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+        rodape.setAlignment(Pos.CENTER_RIGHT);
 
         totalLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
 
@@ -203,8 +260,8 @@ public class OrcamentoView extends BorderPane {
         btnLimpar.setOnAction(e -> limparOrcamento());
 
         Button btnPDF = new Button("📄 Exportar PDF");
-        btnPDF.setStyle("-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-weight: bold;");
-        btnPDF.setOnAction(e -> mostrarAlerta("Funcionalidade em desenvolvimento!\n\nEm breve você poderá exportar orçamentos para PDF."));
+        btnPDF.setStyle("-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnPDF.setOnAction(e -> gerarPDF());
 
         rodape.getChildren().addAll(totalLabel, btnSalvar, btnLimpar, btnPDF);
         return rodape;
@@ -216,14 +273,6 @@ public class OrcamentoView extends BorderPane {
             total += item.getTotal();
         }
         totalLabel.setText(String.format("Total: R$ %.2f", total));
-    }
-
-    private void mostrarAlerta(String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Informação");
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
     }
 
     /**
@@ -238,6 +287,13 @@ public class OrcamentoView extends BorderPane {
         // Criar objeto Orcamento
         br.com.marmoraria.model.Orcamento orcamento = new br.com.marmoraria.model.Orcamento();
 
+        // Adicionar dados do cliente
+        orcamento.setClienteNome(txtClienteNome.getText().trim());
+        orcamento.setClienteTelefone(txtClienteTelefone.getText().trim());
+        orcamento.setClienteEmail(txtClienteEmail.getText().trim());
+        orcamento.setEnderecoObra(txtEnderecoObra.getText().trim());
+        orcamento.setObservacoes(txtObservacoes.getText().trim());
+
         // Adicionar itens
         for (ItemOrcamento item : itens) {
             orcamento.adicionarItem(item);
@@ -251,6 +307,7 @@ public class OrcamentoView extends BorderPane {
 
         if (salvou) {
             mostrarAlerta("✅ Orçamento salvo com sucesso!\n\nNúmero: " + orcamento.getNumeroOrcamento() +
+                    "\nCliente: " + (txtClienteNome.getText().isEmpty() ? "Não informado" : txtClienteNome.getText()) +
                     "\nLocal: " + br.com.marmoraria.util.FileManager.getPastaOrcamentos());
         } else {
             mostrarAlerta("❌ Erro ao salvar orçamento.");
@@ -264,6 +321,13 @@ public class OrcamentoView extends BorderPane {
         // Limpar itens existentes
         itens.clear();
 
+        // Carregar dados do cliente
+        txtClienteNome.setText(orcamento.getClienteNome() != null ? orcamento.getClienteNome() : "");
+        txtClienteTelefone.setText(orcamento.getClienteTelefone() != null ? orcamento.getClienteTelefone() : "");
+        txtClienteEmail.setText(orcamento.getClienteEmail() != null ? orcamento.getClienteEmail() : "");
+        txtEnderecoObra.setText(orcamento.getEnderecoObra() != null ? orcamento.getEnderecoObra() : "");
+        txtObservacoes.setText(orcamento.getObservacoes() != null ? orcamento.getObservacoes() : "");
+
         // Adicionar os itens do orçamento carregado
         for (ItemOrcamento item : orcamento.getItens()) {
             itens.add(item);
@@ -275,6 +339,7 @@ public class OrcamentoView extends BorderPane {
         // Mostrar mensagem de confirmação
         System.out.println("📂 Orçamento carregado: " + orcamento.getNumeroOrcamento());
         mostrarAlerta("✅ Orçamento carregado com sucesso!\n\nNúmero: " + orcamento.getNumeroOrcamento() +
+                "\nCliente: " + (orcamento.getClienteNome() != null ? orcamento.getClienteNome() : "Não informado") +
                 "\nData: " + orcamento.getDataFormatada() +
                 "\nItens: " + orcamento.getItens().size());
     }
@@ -286,12 +351,77 @@ public class OrcamentoView extends BorderPane {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Limpar Orçamento");
         confirm.setHeaderText("Confirmar limpeza");
-        confirm.setContentText("Tem certeza que deseja limpar todos os itens?\n\nEsta ação não pode ser desfeita.");
+        confirm.setContentText("Tem certeza que deseja limpar todos os itens e dados do cliente?\n\nEsta ação não pode ser desfeita.");
 
         if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             itens.clear();
             atualizarTotal();
-            mostrarAlerta("Orçamento limpo com sucesso!");
+
+            // Limpar campos do cliente
+            txtClienteNome.clear();
+            txtClienteTelefone.clear();
+            txtClienteEmail.clear();
+            txtEnderecoObra.clear();
+            txtObservacoes.clear();
+
+            mostrarAlerta("✅ Orçamento limpo com sucesso!");
         }
+    }
+
+    /**
+     * Gera PDF do orçamento atual
+     */
+    private void gerarPDF() {
+        if (itens.isEmpty()) {
+            mostrarAlerta("Não há itens para gerar PDF. Adicione pelo menos um item.");
+            return;
+        }
+
+        // Criar objeto Orcamento
+        br.com.marmoraria.model.Orcamento orcamento = new br.com.marmoraria.model.Orcamento();
+
+        // Adicionar dados do cliente
+        orcamento.setClienteNome(txtClienteNome.getText().trim());
+        orcamento.setClienteTelefone(txtClienteTelefone.getText().trim());
+        orcamento.setClienteEmail(txtClienteEmail.getText().trim());
+        orcamento.setEnderecoObra(txtEnderecoObra.getText().trim());
+        orcamento.setObservacoes(txtObservacoes.getText().trim());
+
+        // Adicionar itens
+        for (ItemOrcamento item : itens) {
+            orcamento.adicionarItem(item);
+        }
+
+        // Calcular totais
+        orcamento.calcularTotais();
+
+        // Gerar PDF
+        boolean sucesso = GeradorPDF.gerarOrcamentoPDF(orcamento);
+
+        if (sucesso) {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("PDF Gerado");
+            confirm.setHeaderText("✅ Orçamento gerado com sucesso!");
+            confirm.setContentText(
+                    "Arquivo: " + orcamento.getNumeroOrcamento() + ".pdf\n" +
+                            "Cliente: " + (txtClienteNome.getText().isEmpty() ? "Não informado" : txtClienteNome.getText()) +
+                            "\nLocal: " + GeradorPDF.getPastaPDFs() + "\n\n" +
+                            "Deseja abrir o PDF agora?"
+            );
+
+            if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                GeradorPDF.abrirPDF(orcamento.getNumeroOrcamento());
+            }
+        } else {
+            mostrarAlerta("❌ Erro ao gerar PDF.\n\nVerifique se a pasta 'pdfs' tem permissão de escrita.");
+        }
+    }
+
+    private void mostrarAlerta(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Informação");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }

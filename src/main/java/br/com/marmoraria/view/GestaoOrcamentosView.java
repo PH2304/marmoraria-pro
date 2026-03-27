@@ -2,8 +2,8 @@ package br.com.marmoraria.view;
 
 import br.com.marmoraria.model.Orcamento;
 import br.com.marmoraria.util.FileManager;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import br.com.marmoraria.util.GeradorPDF;
+import br.com.marmoraria.util.FileManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,10 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 public class GestaoOrcamentosView extends BorderPane {
 
     private ListView<String> listaOrcamentos;
-    private ObservableList<String> orcamentosList;
     private TextArea detalhesArea;
 
     public GestaoOrcamentosView() {
@@ -28,15 +32,15 @@ public class GestaoOrcamentosView extends BorderPane {
         // Painel esquerdo - Lista de orçamentos
         VBox painelLista = criarPainelLista();
 
-        // Painel direito - Detalhes
-        VBox painelDetalhes = criarPainelDetalhes();
+        // Painel direito - Informações
+        VBox painelInfo = criarPainelInfo();
 
         // Botões
         HBox botoes = criarBotoes();
 
         // Layout
         HBox conteudo = new HBox(20);
-        conteudo.getChildren().addAll(painelLista, painelDetalhes);
+        conteudo.getChildren().addAll(painelLista, painelInfo);
 
         setTop(titulo);
         setCenter(conteudo);
@@ -48,13 +52,12 @@ public class GestaoOrcamentosView extends BorderPane {
 
     private VBox criarPainelLista() {
         VBox box = new VBox(10);
-        box.setPrefWidth(300);
+        box.setPrefWidth(350);
 
-        Label label = new Label("Orçamentos Salvos");
+        Label label = new Label("📋 Orçamentos Salvos");
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-        orcamentosList = FXCollections.observableArrayList();
-        listaOrcamentos = new ListView<>(orcamentosList);
+        listaOrcamentos = new ListView<>();
         listaOrcamentos.setPrefHeight(400);
         listaOrcamentos.setStyle("-fx-background-color: white; -fx-background-radius: 8px;");
 
@@ -65,15 +68,16 @@ public class GestaoOrcamentosView extends BorderPane {
             }
         });
 
+        VBox.setVgrow(listaOrcamentos, Priority.ALWAYS);
         box.getChildren().addAll(label, listaOrcamentos);
         return box;
     }
 
-    private VBox criarPainelDetalhes() {
+    private VBox criarPainelInfo() {
         VBox box = new VBox(10);
-        box.setPrefWidth(500);
+        box.setPrefWidth(450);
 
-        Label label = new Label("Detalhes do Orçamento");
+        Label label = new Label("ℹ️ Detalhes do Orçamento");
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         detalhesArea = new TextArea();
@@ -92,11 +96,15 @@ public class GestaoOrcamentosView extends BorderPane {
         box.setPadding(new Insets(20, 0, 0, 0));
 
         Button btnAbrir = new Button("📂 Abrir Orçamento");
-        btnAbrir.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 20;");
+        btnAbrir.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-weight: bold;");
         btnAbrir.setOnAction(e -> abrirOrcamentoSelecionado());
 
+        Button btnGerarPDF = new Button("📄 Gerar PDF");
+        btnGerarPDF.setStyle("-fx-background-color: #e67e22; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-weight: bold;");
+        btnGerarPDF.setOnAction(e -> gerarPDFDoOrcamentoSelecionado());
+
         Button btnDeletar = new Button("🗑️ Deletar");
-        btnDeletar.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20;");
+        btnDeletar.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-weight: bold;");
         btnDeletar.setOnAction(e -> deletarOrcamentoSelecionado());
 
         Button btnAtualizar = new Button("🔄 Atualizar");
@@ -107,21 +115,39 @@ public class GestaoOrcamentosView extends BorderPane {
         btnFechar.setStyle("-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-padding: 10 20;");
         btnFechar.setOnAction(e -> ((Stage) getScene().getWindow()).close());
 
-        box.getChildren().addAll(btnAbrir, btnDeletar, btnAtualizar, btnFechar);
+        box.getChildren().addAll(btnAbrir, btnGerarPDF, btnDeletar, btnAtualizar, btnFechar);
         return box;
     }
 
     private void carregarListaOrcamentos() {
-        orcamentosList.clear();
-        orcamentosList.addAll(FileManager.listarNomesOrcamentos());
+        listaOrcamentos.getItems().clear();
+        List<Orcamento> orcamentos = FileManager.listarOrcamentos();
 
-        if (orcamentosList.isEmpty()) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        if (orcamentos.isEmpty()) {
+            listaOrcamentos.getItems().add("Nenhum orçamento encontrado");
             detalhesArea.setText("Nenhum orçamento salvo ainda.\n\nUse a calculadora para criar e salvar orçamentos.");
+        } else {
+            for (Orcamento orc : orcamentos) {
+                String data = sdf.format(new Date(orc.getDataCriacao().toEpochSecond(null) * 1000));
+                String info = String.format("%s | %s | R$ %.2f | %s",
+                        orc.getNumeroOrcamento(),
+                        data,
+                        orc.getValorComLucro(),
+                        orc.getStatus());
+                listaOrcamentos.getItems().add(info);
+            }
         }
     }
 
-    private void carregarDetalhesOrcamento(String numero) {
-        Orcamento orcamento = FileManager.carregarOrcamento(numero);
+    private void carregarDetalhesOrcamento(String itemSelecionado) {
+        if (itemSelecionado.equals("Nenhum orçamento encontrado")) {
+            return;
+        }
+
+        String numeroOrcamento = itemSelecionado.split(" \\| ")[0];
+        Orcamento orcamento = FileManager.carregarOrcamento(numeroOrcamento);
 
         if (orcamento != null) {
             StringBuilder sb = new StringBuilder();
@@ -163,44 +189,90 @@ public class GestaoOrcamentosView extends BorderPane {
 
     private void abrirOrcamentoSelecionado() {
         String selecionado = listaOrcamentos.getSelectionModel().getSelectedItem();
-        if (selecionado != null) {
-            Orcamento orcamento = FileManager.carregarOrcamento(selecionado);
-            if (orcamento != null) {
-                // Abrir a calculadora com o orçamento carregado
-                OrcamentoView orcamentoView = new OrcamentoView();
-                orcamentoView.carregarOrcamento(orcamento);
+        if (selecionado == null || selecionado.equals("Nenhum orçamento encontrado")) {
+            mostrarAlerta("Selecione um orçamento para abrir.");
+            return;
+        }
 
-                Scene scene = new Scene(orcamentoView, 950, 580);
-                Stage stage = new Stage();
-                stage.setTitle("Orçamento: " + selecionado);
-                stage.setScene(scene);
-                stage.show();
+        String numeroOrcamento = selecionado.split(" \\| ")[0];
+        Orcamento orcamento = FileManager.carregarOrcamento(numeroOrcamento);
+
+        if (orcamento != null) {
+            OrcamentoView orcamentoView = new OrcamentoView();
+            orcamentoView.carregarOrcamento(orcamento);
+
+            Scene scene = new Scene(orcamentoView, 950, 580);
+            Stage stage = new Stage();
+            stage.setTitle("Orçamento: " + numeroOrcamento);
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            mostrarAlerta("Erro ao carregar orçamento.");
+        }
+    }
+
+    /**
+     * Gera PDF do orçamento selecionado
+     */
+    private void gerarPDFDoOrcamentoSelecionado() {
+        String selecionado = listaOrcamentos.getSelectionModel().getSelectedItem();
+        if (selecionado == null || selecionado.equals("Nenhum orçamento encontrado")) {
+            mostrarAlerta("Selecione um orçamento para gerar PDF.");
+            return;
+        }
+
+        // Extrair o número do orçamento
+        String numeroOrcamento = selecionado.split(" \\| ")[0];
+
+        Orcamento orcamento = FileManager.carregarOrcamento(numeroOrcamento);
+
+        if (orcamento != null) {
+            boolean sucesso = GeradorPDF.gerarOrcamentoPDF(orcamento);
+
+            if (sucesso) {
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("PDF Gerado");
+                confirm.setHeaderText("Orçamento gerado com sucesso!");
+                confirm.setContentText(
+                        "Arquivo: " + numeroOrcamento + ".pdf\n" +
+                                "Local: " + GeradorPDF.getPastaPDFs() + "\n\n" +
+                                "Deseja abrir o PDF agora?"
+                );
+
+                if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    GeradorPDF.abrirPDF(numeroOrcamento);
+                }
+            } else {
+                mostrarAlerta("❌ Erro ao gerar PDF.\n\nVerifique se a pasta 'pdfs' tem permissão de escrita.");
             }
         } else {
-            mostrarAlerta("Selecione um orçamento para abrir.");
+            mostrarAlerta("Erro ao carregar orçamento.");
         }
     }
 
     private void deletarOrcamentoSelecionado() {
         String selecionado = listaOrcamentos.getSelectionModel().getSelectedItem();
-        if (selecionado != null) {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Confirmar exclusão");
-            confirm.setHeaderText("Deletar orçamento");
-            confirm.setContentText("Tem certeza que deseja deletar o orçamento " + selecionado + "?");
-
-            if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                boolean deletado = FileManager.deletarOrcamento(selecionado);
-                if (deletado) {
-                    carregarListaOrcamentos();
-                    detalhesArea.clear();
-                    mostrarAlerta("Orçamento deletado com sucesso!");
-                } else {
-                    mostrarAlerta("Erro ao deletar orçamento.");
-                }
-            }
-        } else {
+        if (selecionado == null || selecionado.equals("Nenhum orçamento encontrado")) {
             mostrarAlerta("Selecione um orçamento para deletar.");
+            return;
+        }
+
+        String numeroOrcamento = selecionado.split(" \\| ")[0];
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmar exclusão");
+        confirm.setHeaderText("Deletar orçamento");
+        confirm.setContentText("Tem certeza que deseja deletar o orçamento " + numeroOrcamento + "?\n\nEsta ação não pode ser desfeita.");
+
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            boolean deletado = FileManager.deletarOrcamento(numeroOrcamento);
+            if (deletado) {
+                carregarListaOrcamentos();
+                detalhesArea.clear();
+                mostrarAlerta("✅ Orçamento deletado com sucesso!");
+            } else {
+                mostrarAlerta("❌ Erro ao deletar orçamento.");
+            }
         }
     }
 
