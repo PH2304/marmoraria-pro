@@ -1,9 +1,6 @@
 package br.com.marmoraria;
 
-import br.com.marmoraria.view.ConfiguracoesView;
-import br.com.marmoraria.view.GestaoBackupView;
-import br.com.marmoraria.view.GestaoOrcamentosView;
-import br.com.marmoraria.view.OrcamentoView;
+import br.com.marmoraria.view.*;
 import br.com.marmoraria.util.GerenciadorBackup;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -305,57 +302,16 @@ public class Main extends Application {
     }
 
     /**
-     * Abre o catálogo de materiais
+     * Abre o catálogo online de materiais
      */
     private void abrirCatalogo() {
         try {
-            VBox catalogoView = new VBox(12);
-            catalogoView.setStyle("-fx-padding: 25; -fx-background-color: #ecf0f1;");
-            catalogoView.setAlignment(Pos.TOP_CENTER);
-
-            Label titulo = new Label("📚 Catálogo de Materiais");
-            titulo.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-
-            Label mensagem = new Label(
-                    "📦 MATERIAIS DISPONÍVEIS:\n\n" +
-                            "• Granito Preto Absoluto\n" +
-                            "  Preço: R$ 350,00/m²\n" +
-                            "  Espessura: 20mm\n\n" +
-
-                            "• Granito Verde Ubatuba\n" +
-                            "  Preço: R$ 280,00/m²\n" +
-                            "  Espessura: 20mm\n\n" +
-
-                            "• Mármore Carrara\n" +
-                            "  Preço: R$ 520,00/m²\n" +
-                            "  Espessura: 20mm\n\n" +
-
-                            "• Quartzo Branco\n" +
-                            "  Preço: R$ 650,00/m²\n" +
-                            "  Espessura: 20mm\n\n" +
-
-                            "🔧 SERVIÇOS DISPONÍVEIS:\n\n" +
-                            "• Corte reto - R$ 40,00/m\n" +
-                            "• Polimento simples - R$ 60,00/m²\n" +
-                            "• Instalação padrão - R$ 250,00/un\n\n" +
-
-                            "✨ Mais materiais em breve!"
-            );
-            mensagem.setStyle("-fx-font-size: 13px; -fx-text-fill: #2c3e50;");
-            mensagem.setWrapText(true);
-
-            Button fechar = new Button("Fechar");
-            fechar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 20; -fx-font-weight: bold;");
-            fechar.setOnAction(e -> ((Stage) fechar.getScene().getWindow()).close());
-
-            catalogoView.getChildren().addAll(titulo, mensagem, fechar);
-
-            Scene scene = new Scene(catalogoView, 650, 500);
+            CatalogoOnlineView catalogoView = new CatalogoOnlineView();
+            Scene scene = new Scene(catalogoView, 1000, 700);
             Stage stage = new Stage();
-            stage.setTitle("Catálogo - Marmoraria Pro");
+            stage.setTitle("Catálogo Online - Marmoraria Pro");
             stage.setScene(scene);
             stage.show();
-
         } catch (Exception e) {
             e.printStackTrace();
             mostrarErro("Erro ao abrir catálogo: " + e.getMessage());

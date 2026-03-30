@@ -10,57 +10,28 @@ import java.util.stream.Collectors;
 
 public class MaterialService {
 
-    private final List<Material> materiais = new ArrayList<>();
+    private List<Material> materiais;
     private final List<Servico> servicos = new ArrayList<>();
 
     public MaterialService() {
-        carregarMateriais();
         carregarServicos();
+        carregarMateriais();
     }
 
     // ================= MATERIAIS =================
 
     private void carregarMateriais() {
+        // Usar a API para obter materiais
+        materiais = MaterialAPI.getMateriais();
+    }
 
-        materiais.add(new Material(
-                "M01",
-                "Granito Preto Absoluto",
-                "Granito",
-                350.00,
-                20,
-                "Brasil",
-                "Granito nacional de alta resistência"
-        ));
-
-        materiais.add(new Material(
-                "M02",
-                "Granito Verde Ubatuba",
-                "Granito",
-                280.00,
-                20,
-                "Brasil",
-                "Granito de tom esverdeado"
-        ));
-
-        materiais.add(new Material(
-                "M03",
-                "Mármore Carrara",
-                "Mármore",
-                520.00,
-                20,
-                "Itália",
-                "Mármore importado clássico"
-        ));
-
-        materiais.add(new Material(
-                "M04",
-                "Quartzo Branco",
-                "Quartzo",
-                650.00,
-                20,
-                "Industrializado",
-                "Quartzo branco premium"
-        ));
+    /**
+     * Força atualização dos materiais da internet
+     */
+    public void atualizarMateriais() {
+        MaterialAPI.forcarAtualizacao();
+        materiais = MaterialAPI.getMateriais();
+        System.out.println("🔄 Materiais atualizados via internet!");
     }
 
     public List<Material> getTodosMateriais() {
@@ -79,10 +50,13 @@ public class MaterialService {
                 .collect(Collectors.toList());
     }
 
+    public String getInfoUltimaAtualizacao() {
+        return MaterialAPI.getInfoUltimaAtualizacao();
+    }
+
     // ================= SERVIÇOS =================
 
     private void carregarServicos() {
-
         servicos.add(new Servico(
                 "S01",
                 "Corte reto",
@@ -93,6 +67,14 @@ public class MaterialService {
 
         servicos.add(new Servico(
                 "S02",
+                "Corte em ângulo",
+                60.00,
+                "m",
+                "Corte"
+        ));
+
+        servicos.add(new Servico(
+                "S03",
                 "Polimento simples",
                 60.00,
                 "m²",
@@ -100,9 +82,33 @@ public class MaterialService {
         ));
 
         servicos.add(new Servico(
-                "S03",
+                "S04",
+                "Polimento especial",
+                90.00,
+                "m²",
+                "Polimento"
+        ));
+
+        servicos.add(new Servico(
+                "S05",
                 "Instalação padrão",
                 250.00,
+                "un",
+                "Instalação"
+        ));
+
+        servicos.add(new Servico(
+                "S06",
+                "Instalação premium",
+                400.00,
+                "un",
+                "Instalação"
+        ));
+
+        servicos.add(new Servico(
+                "S07",
+                "Furação para torneira",
+                50.00,
                 "un",
                 "Instalação"
         ));
@@ -124,4 +130,3 @@ public class MaterialService {
                 .collect(Collectors.toList());
     }
 }
-
