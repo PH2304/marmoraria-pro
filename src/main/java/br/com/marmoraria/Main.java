@@ -88,23 +88,15 @@ public class Main extends Application {
         );
         cardConfiguracoes.setOnMouseClicked(e -> abrirConfiguracoes());
 
-        // Card Estatísticas
-        VBox cardEstatisticas = criarCard(
+        // ========== NOVO CARD DASHBOARD ==========
+        // Card Dashboard
+        VBox cardDashboard = criarCard(
                 "📊",
-                "Estatísticas",
-                "Acompanhe métricas e indicadores do seu negócio.",
-                "#f39c12"
+                "Dashboard",
+                "Visualize estatísticas e métricas do seu negócio.",
+                "#e74c3c"
         );
-        cardEstatisticas.setOnMouseClicked(e -> mostrarInfo("Estatísticas", "Funcionalidade em desenvolvimento!\n\nEm breve você terá gráficos e métricas detalhadas."));
-
-        // Card Relatórios
-        VBox cardRelatorios = criarCard(
-                "📄",
-                "Relatórios",
-                "Exporte relatórios em PDF e acompanhe seus resultados.",
-                "#9b59b6"
-        );
-        cardRelatorios.setOnMouseClicked(e -> mostrarInfo("Relatórios", "Funcionalidade em desenvolvimento!\n\nEm breve você poderá gerar relatórios completos em PDF."));
+        cardDashboard.setOnMouseClicked(e -> abrirDashboard());
 
         // Card Ajuda
         VBox cardAjuda = criarCard(
@@ -145,13 +137,12 @@ public class Main extends Application {
         grid.add(cardConfiguracoes, 2, 1);
 
         // Linha 3
-        grid.add(cardEstatisticas, 0, 2);
-        grid.add(cardRelatorios, 1, 2);
-        grid.add(cardAjuda, 2, 2);
+        grid.add(cardDashboard, 0, 2);   // ← DASHBOARD AQUI!
+        grid.add(cardAjuda, 1, 2);
+        grid.add(cardSobre, 2, 2);
 
         // Linha 4
-        grid.add(cardSobre, 1, 3);
-        grid.add(cardSair, 2, 3);
+        grid.add(cardSair, 1, 3);
 
         // Rodapé
         HBox footer = new HBox();
@@ -493,6 +484,23 @@ public class Main extends Application {
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             System.out.println("👋 Sistema encerrado!");
             System.exit(0);
+        }
+    }
+
+    /**
+     * Abre o dashboard de estatísticas
+     */
+    private void abrirDashboard() {
+        try {
+            DashboardView dashboardView = new DashboardView();
+            Scene scene = new Scene(dashboardView, 1200, 800);
+            Stage stage = new Stage();
+            stage.setTitle("Dashboard - Marmoraria Pro");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir dashboard: " + e.getMessage());
         }
     }
 
