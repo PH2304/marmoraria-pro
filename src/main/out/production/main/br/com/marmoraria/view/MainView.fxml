@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="br.com.marmoraria.controller.MainController"
+      spacing="20"
+      style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom right, #f5f5f5, #e8e8e8);"
+      prefWidth="1200" prefHeight="700">
+
+    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+    <!-- Cabeçalho -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="MARMORARIA PRO" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+            <graphic>
+                <!-- Comente esta linha se não tiver a imagem -->
+                <!-- <ImageView fitWidth="40" fitHeight="40">
+                    <Image url="@/images/logo.png" />
+                </ImageView> -->
+                <!-- Ou use um Label com emoji como fallback -->
+                <Label text="💎" style="-fx-font-size: 32px;"/>
+            </graphic>
+        </Label>
+        <Label text="Calculadora Profissional de Orçamentos"
+               style="-fx-font-size: 18px; -fx-text-fill: #7f8c8d;"/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- Conteúdo Principal -->
+    <GridPane hgap="20" vgap="20">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50"/>
+            <ColumnConstraints percentWidth="50"/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints percentHeight="50"/>
+            <RowConstraints percentHeight="50"/>
+        </rowConstraints>
+
+        <!-- Card Calculadora -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+              GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label text="Calculadora" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+            <Label text="Cálculo preciso de áreas, materiais e custos"
+                   style="-fx-font-size: 14px; -fx-text-fill: #95a5a6;"/>
+            <VBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                <Label text="• Cálculo de áreas (m²)"/>
+                <Label text="• Metragem linear"/>
+                <Label text="• Custo de materiais"/>
+                <Label text="• Serviços (corte, polimento, instalação)"/>
+                <Label text="• Cálculo automático de totais"/>
+            </VBox>
+            <Button text="Abrir Calculadora"
+                    onAction="#abrirCalculadora"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;"
+                    VBox.vgrow="ALWAYS" GridPane.valignment="BOTTOM">
+                <VBox.margin><Insets top="20"/></VBox.margin>
+            </Button>
+        </VBox>
+
+        <!-- Card Orçamentos -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+              GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label text="Orçamentos" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;"/>
+            <Label text="Gestão completa de orçamentos e clientes"
+                   style="-fx-font-size: 14px; -fx-text-fill: #95a5a6;"/>
+            <VBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                <Label text="• Criação de orçamentos"/>
+                <Label text="• Gestão de clientes"/>
+                <Label text="• Cálculo de margens de lucro"/>
+                <Label text="• Geração de PDF"/>
+                <Label text="• Histórico de orçamentos"/>
+            </VBox>
+            <Button text="Abrir Orçamentos"
+                    onAction="#abrirOrcamentos"
+                    style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;"
+                    VBox.vgrow="ALWAYS" GridPane.valignment="BOTTOM">
+                <VBox.margin><Insets top="20"/></VBox.margin>
+            </Button>
+        </VBox>
+
+        <!-- Card Materiais -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+              GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label text="Catálogo" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+            <Label text="Catálogo de materiais e serviços"
+                   style="-fx-font-size: 14px; -fx-text-fill: #95a5a6;"/>
+            <VBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                <Label text="• Mármores (Carrara, Crema Marfil, etc.)"/>
+                <Label text="• Granitos (Preto Absoluto, Verde Ubatuba)"/>
+                <Label text="• Quartzos e pedras especiais"/>
+                <Label text="• Serviços de corte e polimento"/>
+                <Label text="• Preços atualizáveis"/>
+            </VBox>
+            <Button text="Abrir Catálogo"
+                    onAction="#abrirMateriais"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;"
+                    VBox.vgrow="ALWAYS" GridPane.valignment="BOTTOM">
+                <VBox.margin><Insets top="20"/></VBox.margin>
+            </Button>
+        </VBox>
+
+        <!-- Card Relatórios -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+              GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Relatórios" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #9b59b6;"/>
+            <Label text="Relatórios e exportação de dados"
+                   style="-fx-font-size: 14px; -fx-text-fill: #95a5a6;"/>
+            <VBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                <Label text="• Exportação para PDF"/>
+                <Label text="• Relatórios por período"/>
+                <Label text="• Análise de lucratividade"/>
+                <Label text="• Estatísticas de materiais"/>
+                <Label text="• Backups automáticos"/>
+            </VBox>
+            <Button text="Gerar Relatórios"
+                    style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;"
+                    VBox.vgrow="ALWAYS" GridPane.valignment="BOTTOM">
+                <VBox.margin><Insets top="20"/></VBox.margin>
+            </Button>
+        </VBox>
+    </GridPane>
+
+    <!-- Rodapé -->
+    <Separator/>
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="Sobre" onAction="#mostrarSobre"
+                style="-fx-background-color: transparent; -fx-text-fill: #3498db;"/>
+        <Separator orientation="VERTICAL"/>
+        <Button text="Sair" onAction="#sair"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15;"/>
+    </HBox>
+
+</VBox>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.com.marmoraria.controller.MainController"
+      spacing="20"
+      alignment="TOP_CENTER"
+      style="-fx-padding: 30; -fx-background-color: #ecf0f1;">
+
+    <Label text="MARMORARIA PRO"
+           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+    <Separator/>
+
+    <Button text="🧮 CALCULADORA"
+            onAction="#abrirCalculadora"
+            prefWidth="250"
+            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12;"/>
+
+    <Button text="📋 ORÇAMENTOS"
+            onAction="#abrirOrcamentos"
+            prefWidth="250"
+            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12;"/>
+
+    <Button text="📚 CATÁLOGO"
+            onAction="#abrirMateriais"
+            prefWidth="250"
+            style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12;"/>
+
+    <Separator/>
+
+    <Button text="❓ AJUDA"
+            onAction="#mostrarAjuda"
+            prefWidth="250"
+            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 10;"/>
+
+    <Button text="ℹ️ SOBRE"
+            onAction="#mostrarSobre"
+            prefWidth="250"
+            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 10;"/>
+
+    <Button text="🚪 SAIR"
+            onAction="#sair"
+            prefWidth="250"
+            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10;"/>
+
+</VBox>
