@@ -1,0 +1,46 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+bin/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# JavaFX SDK (não enviar o SDK)
+javafx-sdk-*/
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Configurações locais
+*.properties
+config.local.*
+
+# Executáveis
+*.exe
+*.bat
+*.sh
+
+# Backup files
+*.bak
