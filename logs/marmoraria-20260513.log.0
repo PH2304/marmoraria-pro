@@ -1,0 +1,49 @@
+[36m2026-05-13 19:23:08.573[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:23:08.573[0m [32mINFO [0m [LoggerConfig] Sistema de logging inicializado
+[36m2026-05-13 19:23:08.574[0m [32mINFO [0m [LoggerConfig] Pasta de logs: C:\Users\User\Desktop\marmoraria-pro-main\logs
+[36m2026-05-13 19:23:08.575[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:23:09.811[0m [33mWARN [0m [css] CSS Error parsing '*{-fx-background-color: linear-gradient(135deg, #00E5FF 0%, #0088FF 100%); -fx-background-radius: 12px; -fx-min-width: 48px; -fx-min-height: 48px; -fx-max-width: 48px; -fx-max-height: 48px; -fx-effect: dropshadow(gaussian, #00E5FF, 15, 0, 0, 5);}: Expected '<color>' while parsing '-fx-background-color' at [1,40]
+[36m2026-05-13 19:23:10.661[0m [32mINFO [0m [Main] 🚀 Marmoraria Pro High-Tech Terminal iniciado!
+[36m2026-05-13 19:23:26.439[0m [32mINFO [0m [CatalogoPrecosService] Carregando catálogo de preços...
+[36m2026-05-13 19:23:26.444[0m [32mINFO [0m [CatalogoPrecosService] ✅ Catálogo carregado com 115 materiais
+[36m2026-05-13 19:23:26.445[0m [32mINFO [0m [MaterialService] Serviços carregados: 10
+[36m2026-05-13 19:23:26.467[0m [32mINFO [0m [MaterialService] Catálogo carregado: 115 materiais em 7 categorias
+[36m2026-05-13 19:23:26.467[0m [32mINFO [0m [MaterialService] MaterialService inicializado com 115 materiais
+[36m2026-05-13 19:23:35.404[0m [32mINFO [0m [GerenciadorArquivos] Orçamentos carregados: 1
+[36m2026-05-13 19:25:17.476[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:25:17.476[0m [32mINFO [0m [LoggerConfig] Sistema de logging inicializado
+[36m2026-05-13 19:25:17.477[0m [32mINFO [0m [LoggerConfig] Pasta de logs: C:\Users\User\Desktop\marmoraria-pro-main\logs
+[36m2026-05-13 19:25:17.478[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:25:18.588[0m [33mWARN [0m [css] CSS Error parsing '*{-fx-background-color: linear-gradient(135deg, #00E5FF 0%, #0088FF 100%); -fx-background-radius: 12px; -fx-min-width: 48px; -fx-min-height: 48px; -fx-max-width: 48px; -fx-max-height: 48px; -fx-effect: dropshadow(gaussian, #00E5FF, 15, 0, 0, 5);}: Expected '<color>' while parsing '-fx-background-color' at [1,40]
+[36m2026-05-13 19:25:19.447[0m [32mINFO [0m [Main] 🚀 Marmoraria Pro High-Tech Terminal iniciado!
+[36m2026-05-13 19:25:24.907[0m [32mINFO [0m [CatalogoPrecosService] Carregando catálogo de preços...
+[36m2026-05-13 19:25:24.909[0m [32mINFO [0m [CatalogoPrecosService] ✅ Catálogo carregado com 115 materiais
+[36m2026-05-13 19:25:24.910[0m [32mINFO [0m [MaterialService] Serviços carregados: 10
+[36m2026-05-13 19:25:24.927[0m [32mINFO [0m [MaterialService] Catálogo carregado: 115 materiais em 7 categorias
+[36m2026-05-13 19:25:24.928[0m [32mINFO [0m [MaterialService] MaterialService inicializado com 115 materiais
+[36m2026-05-13 19:25:39.453[0m [32mINFO [0m [GerenciadorArquivos] Orçamentos carregados: 1
+[36m2026-05-13 19:25:39.454[0m [32mINFO [0m [DashboardView] Dashboard carregou 1 orçamentos
+[36m2026-05-13 19:31:03.809[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:31:03.810[0m [32mINFO [0m [LoggerConfig] Sistema de logging inicializado
+[36m2026-05-13 19:31:03.811[0m [32mINFO [0m [LoggerConfig] Pasta de logs: C:\Users\User\Desktop\marmoraria-pro-main\logs
+[36m2026-05-13 19:31:03.812[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:31:04.948[0m [33mWARN [0m [css] CSS Error parsing '*{-fx-background-color: linear-gradient(135deg, #00E5FF 0%, #0088FF 100%); -fx-background-radius: 12px; -fx-min-width: 48px; -fx-min-height: 48px; -fx-max-width: 48px; -fx-max-height: 48px; -fx-effect: dropshadow(gaussian, #00E5FF, 15, 0, 0, 5);}: Expected '<color>' while parsing '-fx-background-color' at [1,40]
+[36m2026-05-13 19:31:05.752[0m [32mINFO [0m [Main] 🚀 Marmoraria Pro High-Tech Terminal iniciado!
+[36m2026-05-13 19:31:20.805[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:31:20.805[0m [32mINFO [0m [LoggerConfig] Sistema de logging inicializado
+[36m2026-05-13 19:31:20.806[0m [32mINFO [0m [LoggerConfig] Pasta de logs: C:\Users\User\Desktop\marmoraria-pro-main\logs
+[36m2026-05-13 19:31:20.806[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:31:21.839[0m [33mWARN [0m [css] CSS Error parsing '*{-fx-background-color: linear-gradient(135deg, #00E5FF 0%, #0088FF 100%); -fx-background-radius: 12px; -fx-min-width: 48px; -fx-min-height: 48px; -fx-max-width: 48px; -fx-max-height: 48px; -fx-effect: dropshadow(gaussian, #00E5FF, 15, 0, 0, 5);}: Expected '<color>' while parsing '-fx-background-color' at [1,40]
+[36m2026-05-13 19:31:22.686[0m [32mINFO [0m [Main] 🚀 Marmoraria Pro High-Tech Terminal iniciado!
+[36m2026-05-13 19:31:24.215[0m [32mINFO [0m [GerenciadorArquivos] Orçamentos carregados: 1
+[36m2026-05-13 19:31:26.709[0m [32mINFO [0m [CatalogoPrecosService] Carregando catálogo de preços...
+[36m2026-05-13 19:31:26.710[0m [32mINFO [0m [CatalogoPrecosService] ✅ Catálogo carregado com 115 materiais
+[36m2026-05-13 19:31:26.711[0m [32mINFO [0m [MaterialService] Serviços carregados: 10
+[36m2026-05-13 19:31:26.725[0m [32mINFO [0m [MaterialService] Catálogo carregado: 115 materiais em 7 categorias
+[36m2026-05-13 19:31:26.725[0m [32mINFO [0m [MaterialService] MaterialService inicializado com 115 materiais
+[36m2026-05-13 19:32:07.897[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:32:07.898[0m [32mINFO [0m [LoggerConfig] Sistema de logging inicializado
+[36m2026-05-13 19:32:07.899[0m [32mINFO [0m [LoggerConfig] Pasta de logs: C:\Users\User\Desktop\marmoraria-pro-main\logs
+[36m2026-05-13 19:32:07.900[0m [32mINFO [0m [LoggerConfig] ═══════════════════════════════════
+[36m2026-05-13 19:32:09.147[0m [33mWARN [0m [css] CSS Error parsing '*{-fx-background-color: linear-gradient(135deg, #00E5FF 0%, #0088FF 100%); -fx-background-radius: 12px; -fx-min-width: 48px; -fx-min-height: 48px; -fx-max-width: 48px; -fx-max-height: 48px; -fx-effect: dropshadow(gaussian, #00E5FF, 15, 0, 0, 5);}: Expected '<color>' while parsing '-fx-background-color' at [1,40]
+[36m2026-05-13 19:32:10.139[0m [32mINFO [0m [Main] 🚀 Marmoraria Pro High-Tech Terminal iniciado!

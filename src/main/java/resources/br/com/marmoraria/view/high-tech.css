@@ -1,0 +1,75 @@
+/* high-tech.css - Estilo Wall Street / Trading Terminal */
+
+.root {
+    -fx-background-color: #0D1117;
+    -fx-font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
+}
+
+/* ==================== SCROLLBAR NEON ==================== */
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #00E5FF;
+    -fx-background-radius: 3px;
+    -fx-opacity: 0.5;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-opacity: 1;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: #1A1F2E;
+    -fx-background-radius: 3px;
+}
+
+/* ==================== TABELA HIGH-TECH ==================== */
+
+.table-view {
+    -fx-background-color: #161B22;
+    -fx-background-radius: 10px;
+    -fx-border-color: #21262D;
+    -fx-border-radius: 10px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #0D1117;
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: #21262D;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #00E5FF;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-font-family: 'Inter', sans-serif;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #161B22;
+    -fx-border-color: #21262D;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #1A1F2E;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #0F2A4A;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #C9D1D9;
+    -fx-font-size: 12px;
+    -fx-font-family: 'JetBrains Mono', monospace;
+}

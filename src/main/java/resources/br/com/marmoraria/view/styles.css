@@ -1,0 +1,117 @@
+/* styles.css - Design System Global */
+
+.root {
+    -fx-font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Scrollbar Moderno */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #CBD5E1;
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #94A3B8;
+}
+
+/* Tabela Moderna */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 12px 12px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #F1F5F9;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #F8FAFC;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #EFF6FF;
+}
+
+/* Combobox Moderno */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 10px;
+    -fx-padding: 8px 12px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2px;
+}
+
+/* Checkbox Moderno */
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 6px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #3B82F6;
+    -fx-border-color: #3B82F6;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+/* Radio Button Moderno */
+.radio-button .radio {
+    -fx-background-color: white;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 50%;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: #3B82F6;
+    -fx-border-color: #3B82F6;
+}
+
+/* TabPane Moderno */
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 10px 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 10px 20px;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #EFF6FF;
+    -fx-background-radius: 10px;
+}
+
+.tab-pane .tab-label {
+    -fx-text-fill: #64748B;
+    -fx-font-weight: 500;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #2563EB;
+}
