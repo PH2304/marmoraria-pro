@@ -1,0 +1,54 @@
+{
+  "id": "6dd5d8be-1101-4cf7-ad27-c89414bc693d",
+  "numeroOrcamento": "ORC-20260507192632",
+  "dataCriacao": "2026-05-07T19:26:32.7699587",
+  "clienteNome": "joão",
+  "clienteTelefone": "",
+  "clienteEmail": "",
+  "enderecoObra": "",
+  "margemLucro": 30.0,
+  "itens": [
+    {
+      "tipoTrabalho": "BANCADA",
+      "material": {
+        "id": "GRAN003",
+        "nome": "AMARELO ICARAI",
+        "tipo": "Granito",
+        "precoPorMetroQuadrado": 500.0,
+        "espessura": 20.0,
+        "origem": "Brasil",
+        "descricao": "AMARELO ICARAI - Granito nacional de alta qualidade. Ideal para bancadas, pisos e revestimentos."
+      },
+      "servico": {
+        "codigo": "S05",
+        "nome": "Instalação padrão",
+        "preco": 250.0,
+        "unidade": "un",
+        "categoria": "Instalação"
+      },
+      "descricao": "Bancada 1x 1500 x 500 mm | saias lat: 0 | saias front: 1 | frontoes lat: 0 | frontoes parede: 1",
+      "largura": 1500.0,
+      "comprimento": 500.0,
+      "quantidade": 1,
+      "areaBase": 0.75,
+      "areaAdicional": 0.35,
+      "area": 1.1,
+      "custoMaterial": 660.0,
+      "custoServico": 250.0,
+      "total": 910.0,
+      "fatorComplexidade": 1.2,
+      "fatorAcabamento": 1.0
+    }
+  ],
+  "valorTotal": 910.0,
+  "valorComLucro": 1183.0,
+  "frete": 0.0,
+  "credito": 0.0,
+  "incluirMaoDeObra": false,
+  "percentualMaoDeObra": 0.3,
+  "valorMinimoMaoDeObra": 1200.0,
+  "valorMaoDeObra": 0.0,
+  "totalFinal": 1183.0,
+  "observacoes": "",
+  "status": "Rascunho"
+}
